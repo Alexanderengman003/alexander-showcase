@@ -17,6 +17,14 @@
     --primary-hover: 221 83% 60%;
     --primary-light: 221 83% 93%;
     
+    /* Blue button variants - darkest to lightest */
+    --blue-dark: 221 83% 45%;
+    --blue-dark-foreground: 0 0% 100%;
+    --blue-medium: 221 83% 55%;
+    --blue-medium-foreground: 0 0% 100%;
+    --blue-light: 221 83% 65%;
+    --blue-light-foreground: 0 0% 100%;
+    
     /* Sophisticated greys */
     --secondary: 210 11% 96%;
     --secondary-foreground: 213 19% 18%;
@@ -82,6 +90,14 @@
     --primary-foreground: 213 19% 8%;
     --primary-hover: 221 83% 75%;
     --primary-light: 221 83% 15%;
+    
+    /* Blue button variants - darkest to lightest (dark mode) */
+    --blue-dark: 221 83% 50%;
+    --blue-dark-foreground: 0 0% 100%;
+    --blue-medium: 221 83% 60%;
+    --blue-medium-foreground: 0 0% 100%;
+    --blue-light: 221 83% 70%;
+    --blue-light-foreground: 0 0% 100%;
     
     --secondary: 213 19% 12%;
     --secondary-foreground: 0 0% 98%;

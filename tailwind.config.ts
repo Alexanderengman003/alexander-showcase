@@ -25,6 +25,18 @@ export default {
           hover: "hsl(var(--primary-hover))",
           light: "hsl(var(--primary-light))",
         },
+        "blue-dark": {
+          DEFAULT: "hsl(var(--blue-dark))",
+          foreground: "hsl(var(--blue-dark-foreground))",
+        },
+        "blue-medium": {
+          DEFAULT: "hsl(var(--blue-medium))",
+          foreground: "hsl(var(--blue-medium-foreground))",
+        },
+        "blue-light": {
+          DEFAULT: "hsl(var(--blue-light))",
+          foreground: "hsl(var(--blue-light-foreground))",
+        },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",

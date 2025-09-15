@@ -64,8 +64,8 @@ export function Hero() {
             <div className="animate-fade-up flex flex-col sm:flex-row gap-4 justify-start" style={{ animationDelay: "0.6s" }}>
               <Button 
                 size="lg" 
-                variant="outline"
-                className="hover-lift font-modern group border-2 hover:border-primary/50 bg-[#0A66C2] hover:bg-[#004182] border-[#0A66C2] text-white"
+                variant="blue-dark"
+                className="hover-lift font-modern group"
                 onClick={() => {
                   track('linkedin_click', { source: 'hero' });
                   window.open('https://www.linkedin.com/in/alexanderengman', '_blank');
@@ -75,21 +75,20 @@ export function Hero() {
               </Button>
               <Button 
                 size="lg" 
-                variant="default" 
-                className="hover-lift font-modern group relative overflow-hidden"
+                variant="blue-medium" 
+                className="hover-lift font-modern group"
                 onClick={() => {
                   track('contact_button_click', { source: 'hero' });
                   window.location.href = 'mailto:alexander@engman.nu?subject=Contact from website&body=Hello Alexander,';
                 }}
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-primary-hover to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <Mail className="relative mr-2 h-4 w-4" />
-                <span className="relative">Get In Touch</span>
+                <Mail className="mr-2 h-4 w-4" />
+                Get In Touch
               </Button>
               <Button 
-                variant="outline" 
+                variant="blue-light" 
                 size="lg" 
-                className="hover-lift font-modern group border-2 hover:border-primary/50"
+                className="hover-lift font-modern group"
                 onClick={() => {
                   track('cv_download_click', { source: 'hero' });
                   const link = document.createElement('a');
