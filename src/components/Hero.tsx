@@ -25,7 +25,7 @@ export function Hero() {
             <div className="relative">
               <img
                 src="/lovable-uploads/fc819219-43d3-4817-b8da-08b472acd701.png"
-                alt="Alexander - Professional Headshot"
+                alt="Alexander Engman - Semiconductor Engineer and Sales Professional in Stockholm, Sweden"
                 className="w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96 rounded-full object-cover shadow-2xl ring-4 ring-white/10 group-hover:scale-105 transition-all duration-500"
               />
               <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-transparent to-primary/10 group-hover:to-primary/20 transition-all duration-500" />
@@ -43,9 +43,9 @@ export function Hero() {
                 </h1>
               
                 <div className="relative">
-                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-medium text-muted-foreground">
-                    Semiconductor engineering and sales
-                  </h2>
+                <h2 className="text-xl sm:text-2xl lg:text-3xl font-medium text-muted-foreground">
+                  Semiconductor Engineering & Technical Sales Professional
+                </h2>
                   <div className="absolute -bottom-2 left-0 w-full h-0.5 bg-gradient-to-r from-primary to-primary/50 rounded-full" />
                 </div>
               </div>
@@ -54,9 +54,9 @@ export function Hero() {
             {/* Description */}
             <div className="animate-fade-up mb-6" style={{ animationDelay: "0.4s" }}>
               <p className="text-lg leading-relaxed text-muted-foreground max-w-2xl text-justify">
-                Passionate about advancing semiconductor technology, with hands-on experience in hardware development and innovation.
-                Specialized in advanced semiconductors, working across design, testing, and implementation of hardware solutions.
-                Bridging technical expertise with customer needs to drive business growth.
+                Experienced semiconductor engineer specializing in MEMS technology, medical device development, and cleanroom fabrication. 
+                Expert in technical sales, application engineering, and bridging advanced semiconductor solutions with customer needs. 
+                Based in Stockholm, Sweden, with extensive experience in hardware development and business growth initiatives.
               </p>
             </div>
 

@@ -67,13 +67,13 @@ export function Projects() {
   return (
     <section id="projects" className="py-16 bg-secondary/30">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="mx-auto max-w-2xl text-center">
+        <div className="mx-auto max-w-2xl text-center mb-8">
           <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Previous Projects
+            Research Projects & Technical Expertise
           </h2>
           <p className="mt-4 text-lg leading-8 text-muted-foreground">
-            Academic research project showcasing expertise in materials science, 
-            nanotechnology, and advanced fabrication techniques.
+            Academic research and engineering projects showcasing expertise in semiconductor technology, 
+            MEMS fabrication, materials science, and advanced manufacturing techniques.
           </p>
         </div>
 

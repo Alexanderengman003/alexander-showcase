@@ -37,6 +37,14 @@ export function About() {
   return (
     <section id="about" className="py-12 bg-secondary/50">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="mx-auto max-w-2xl text-center mb-8">
+          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+            About Alexander Engman
+          </h2>
+          <p className="mt-4 text-lg leading-8 text-muted-foreground">
+            Semiconductor engineer and technical sales professional with expertise in MEMS, medical devices, and advanced materials
+          </p>
+        </div>
 
         <div className="mx-auto mt-8 max-w-7xl">
           {/* Journey Card - Full Width */}
