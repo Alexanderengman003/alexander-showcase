@@ -1,4 +1,4 @@
-import { ArrowDown, Download, Linkedin, Mail, Sparkles } from "lucide-react";
+import { ArrowDown, Download, Linkedin, Mail, Sparkles, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTrackEvent } from "@/hooks/useTrackEvent";
 
@@ -38,26 +38,20 @@ export function Hero() {
             <div className="animate-fade-up space-y-8 mb-8" style={{ animationDelay: "0.2s" }}>
               <div className="space-y-2">
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight leading-tight font-modern mb-4">
-                  <span className="block text-gradient">Alexander</span>
-                  <span className="block text-gradient">Engman</span>
+                  <span className="text-gradient">Alexander Engman</span>
                 </h1>
               
-                <div className="relative">
-                <h2 className="text-xl sm:text-2xl lg:text-3xl font-medium text-muted-foreground">
-                  Semiconductor Engineering & Technical Sales Professional
-                </h2>
+                <div className="relative space-y-2">
+                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-medium text-muted-foreground">
+                    Semiconductor Engineering | Technical Sales Professional
+                  </h2>
+                  <div className="flex items-center gap-2 text-lg text-muted-foreground">
+                    <MapPin className="h-5 w-5" />
+                    <span>Stockholm</span>
+                  </div>
                   <div className="absolute -bottom-2 left-0 w-full h-0.5 bg-gradient-to-r from-primary to-primary/50 rounded-full" />
                 </div>
               </div>
-            </div>
-
-            {/* Description */}
-            <div className="animate-fade-up mb-6" style={{ animationDelay: "0.4s" }}>
-              <p className="text-lg leading-relaxed text-muted-foreground max-w-2xl text-justify">
-                Experienced semiconductor engineer and technical sales professional based in Stockholm, Sweden. Specializing in MEMS technology, 
-                medical device development, cleanroom fabrication, and advanced materials. Expert in application engineering, 
-                bridging complex semiconductor solutions with customer needs, and driving business growth in technical markets.
-              </p>
             </div>
 
             {/* CTA Buttons */}
