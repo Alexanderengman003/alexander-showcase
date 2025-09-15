@@ -54,9 +54,9 @@ export function Hero() {
             {/* Description */}
             <div className="animate-fade-up mb-6" style={{ animationDelay: "0.4s" }}>
               <p className="text-lg leading-relaxed text-muted-foreground max-w-2xl text-justify">
-                Experienced semiconductor engineer specializing in MEMS technology, medical device development, and cleanroom fabrication. 
-                Expert in technical sales, application engineering, and bridging advanced semiconductor solutions with customer needs. 
-                Based in Stockholm, Sweden, with extensive experience in hardware development and business growth initiatives.
+                Experienced semiconductor engineer and technical sales professional based in Stockholm, Sweden. Specializing in MEMS technology, 
+                medical device development, cleanroom fabrication, and advanced materials. Expert in application engineering, 
+                bridging complex semiconductor solutions with customer needs, and driving business growth in technical markets.
               </p>
             </div>
 
