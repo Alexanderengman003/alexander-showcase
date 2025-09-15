@@ -43,7 +43,7 @@ export function Hero() {
               
                 <div className="relative space-y-2">
                   <h2 className="text-xl sm:text-2xl lg:text-3xl font-medium text-muted-foreground">
-                    Semiconductor Engineering | Technical Sales Professional
+                    Semiconductor Engineering | Technical Sales
                   </h2>
                   <div className="flex items-center gap-2 text-lg text-muted-foreground">
                     <MapPin className="h-5 w-5" />
