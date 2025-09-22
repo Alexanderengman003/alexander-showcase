@@ -374,17 +374,17 @@ const Analytics = () => {
 
           {/* Top Countries and Recent Activity Side by Side */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-            {/* Top Countries */}
+            {/* Countries */}
             <Card className="card-gradient">
               <CardHeader>
-                <CardTitle className="font-modern">Top Countries</CardTitle>
-                <CardDescription className="font-modern">Visitors by location</CardDescription>
+                <CardTitle className="font-modern">Countries</CardTitle>
+                <CardDescription className="font-modern">All countries with visitors</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="h-[200px] overflow-y-auto">
                   <div className="space-y-4">
-                    {stats.topCountries && stats.topCountries.length > 0 ? (
-                      stats.topCountries.slice(0, 10).map((country: any, index: number) => (
+                    {stats.allCountries && stats.allCountries.length > 0 ? (
+                      stats.allCountries.map((country: any, index: number) => (
                         <div key={country.country} className="flex items-center justify-between">
                           <div className="flex items-center space-x-3">
                             <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
@@ -414,13 +414,13 @@ const Analytics = () => {
             <Card className="card-gradient">
               <CardHeader>
                 <CardTitle className="font-modern">Recent Activity</CardTitle>
-                <CardDescription className="font-modern">Latest visitor interactions (100 most recent)</CardDescription>
+                <CardDescription className="font-modern">All visitor interactions (complete history)</CardDescription>
               </CardHeader>
               <CardContent>
                 {stats.recentActivity && stats.recentActivity.length > 0 ? (
                   <div className="h-[200px] overflow-y-auto pr-2">
                     <div className="space-y-3">
-                      {stats.recentActivity.slice(0, 100).map((activity: any, index: number) => (
+                      {stats.recentActivity.map((activity: any, index: number) => (
                         <div key={index} className="flex items-start space-x-3 p-2 rounded-lg hover:bg-muted/50 transition-colors">
                           <div className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 ${
                             activity.type === 'event' ? 'bg-green-500' : 'bg-primary'

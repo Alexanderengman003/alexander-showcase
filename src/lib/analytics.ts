@@ -178,32 +178,28 @@ export const getAnalyticsStats = async (days: number = 7) => {
   }
 
   try {
-    // Get total page views
-    let pageViewsQuery = supabase.from('analytics_page_views').select('*');
+    // Get ALL page views (for recent activity - no time filter)
+    const { data: allPageViews, error: allPvError } = await supabase.from('analytics_page_views').select('*');
+    if (allPvError) throw allPvError;
+
+    // Get ALL events (for recent activity - no time filter)  
+    const { data: allEvents, error: allEventsError } = await supabase.from('analytics_events').select('*');
+    if (allEventsError) throw allEventsError;
+
+    // Get ALL sessions (for recent activity - no time filter)
+    const { data: allSessions, error: allSessionsError } = await supabase.from('analytics_sessions').select('*');
+    if (allSessionsError) throw allSessionsError;
+
+    // Filter data for time-based statistics
+    let pageViews = allPageViews;
+    let events = allEvents;
+    let sessions = allSessions;
+
     if (shouldFilterByDate) {
-      pageViewsQuery = pageViewsQuery.gte('created_at', startDate.toISOString());
+      pageViews = allPageViews?.filter(view => new Date(view.created_at) >= startDate) || [];
+      events = allEvents?.filter(event => new Date(event.created_at) >= startDate) || [];
+      sessions = allSessions?.filter(session => new Date(session.first_visit_at) >= startDate) || [];
     }
-    const { data: pageViews, error: pvError } = await pageViewsQuery;
-
-    if (pvError) throw pvError;
-
-    // Get unique sessions
-    let sessionsQuery = supabase.from('analytics_sessions').select('*');
-    if (shouldFilterByDate) {
-      sessionsQuery = sessionsQuery.gte('first_visit_at', startDate.toISOString());
-    }
-    const { data: sessions, error: sessionsError } = await sessionsQuery;
-
-    if (sessionsError) throw sessionsError;
-
-    // Get events for theme tracking
-    let eventsQuery = supabase.from('analytics_events').select('*');
-    if (shouldFilterByDate) {
-      eventsQuery = eventsQuery.gte('created_at', startDate.toISOString());
-    }
-    const { data: events, error: eventsError } = await eventsQuery;
-
-    if (eventsError) throw eventsError;
 
     // Calculate stats
     const totalViews = pageViews?.length || 0;
@@ -329,10 +325,9 @@ export const getAnalyticsStats = async (days: number = 7) => {
     console.log('Traffic data sample:', trafficData.slice(0, 5));
     console.log('Total traffic data points:', trafficData.length);
 
-    // Recent activity - include both page views and events (respecting time filter)
-    const recentPageViews = pageViews
+    // Recent activity - use ALL data (no time filtering)
+    const recentPageViews = allPageViews
       ?.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()) // Sort by newest first
-      .slice(0, 50) // Take most recent 50 from filtered data
       .map(view => ({
         action: 'Page view',
         page: view.page_path === '/' ? 'Home' : view.page_path,
@@ -342,9 +337,8 @@ export const getAnalyticsStats = async (days: number = 7) => {
         timestamp: view.created_at
       })) || [];
 
-    const recentEvents = events
+    const recentEvents = allEvents
       ?.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()) // Sort by newest first
-      .slice(0, 50) // Take most recent 50 from filtered data
       .map(event => ({
         action: event.event_type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
         page: event.page_path || 'Unknown',
@@ -355,10 +349,9 @@ export const getAnalyticsStats = async (days: number = 7) => {
         timestamp: event.created_at
       })) || [];
 
-    // Combine activity without sorting - maintain chronological order from database
+    // Combine activity without limiting - show ALL data
     const combinedActivity = [...recentPageViews, ...recentEvents]
-      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
-      .slice(0, 100);
+      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 
     // Event statistics
     const eventStats = events?.reduce((acc: any, event) => {
@@ -383,14 +376,14 @@ export const getAnalyticsStats = async (days: number = 7) => {
       return acc;
     }, {}) || {};
 
-    const topCountries = Object.entries(countryStats)
+    // All countries - show every country that has visited
+    const allCountries = Object.entries(countryStats)
       .map(([country, visits]) => ({
         country,
         visits: visits as number,
         percentage: totalViews > 0 ? (((visits as number) / totalViews) * 100).toFixed(1) : '0'
       }))
-      .sort((a, b) => b.visits - a.visits)
-      .slice(0, 5);
+      .sort((a, b) => b.visits - a.visits); // Sort by most visits first
 
     return {
       totalViews,
@@ -402,7 +395,7 @@ export const getAnalyticsStats = async (days: number = 7) => {
       filterUsage,
       trafficData,
       recentActivity: combinedActivity,
-      topCountries,
+      allCountries,
       topEvents,
       totalEvents: events?.length || 0
     };
