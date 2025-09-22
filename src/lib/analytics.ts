@@ -329,9 +329,10 @@ export const getAnalyticsStats = async (days: number = 7) => {
     console.log('Traffic data sample:', trafficData.slice(0, 5));
     console.log('Total traffic data points:', trafficData.length);
 
-    // Recent activity - include both page views and events (no sorting, chronological order)
+    // Recent activity - include both page views and events (respecting time filter)
     const recentPageViews = pageViews
-      ?.slice(-50)
+      ?.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()) // Sort by newest first
+      .slice(0, 50) // Take most recent 50 from filtered data
       .map(view => ({
         action: 'Page view',
         page: view.page_path === '/' ? 'Home' : view.page_path,
@@ -342,7 +343,8 @@ export const getAnalyticsStats = async (days: number = 7) => {
       })) || [];
 
     const recentEvents = events
-      ?.slice(-50)
+      ?.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()) // Sort by newest first
+      .slice(0, 50) // Take most recent 50 from filtered data
       .map(event => ({
         action: event.event_type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
         page: event.page_path || 'Unknown',
