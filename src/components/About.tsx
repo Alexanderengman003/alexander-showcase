@@ -48,6 +48,11 @@ export function About() {
             </div>
           </div>
 
+          {/* Consultancy Services Headline */}
+          <div className="mb-6">
+            <h3 className="text-xl font-semibold text-foreground mb-4">Consultancy services</h3>
+          </div>
+
           {/* Skills/Expertise Grid - 2 rows, 3 columns */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             {features.map((feature, index) => (
