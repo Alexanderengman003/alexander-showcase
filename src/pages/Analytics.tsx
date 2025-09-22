@@ -26,6 +26,7 @@ import {
 } from "lucide-react";
 import { LineChart as RechartsLineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart as RechartsBarChart, Bar } from "recharts";
 import { getAnalyticsStats } from "@/lib/analytics";
+import { CVClicksModal } from "@/components/CVClicksModal";
 
 const Analytics = () => {
   // Don't track visits to the analytics page itself
@@ -33,6 +34,7 @@ const Analytics = () => {
   const [timeRange, setTimeRange] = useState("7d");
   const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [cvModalOpen, setCvModalOpen] = useState(false);
 
   const timeRanges = [
     { value: "1d", label: "24h", days: 1 },
@@ -244,23 +246,41 @@ const Analytics = () => {
               <CardDescription className="font-modern">Button clicks, form submissions, and other events ({stats.totalEvents || 0} total)</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                {stats.topEvents && stats.topEvents.length > 0 ? (
-                  stats.topEvents.map((event: any) => (
-                    <div key={event.event} className="text-center p-4 rounded-lg bg-card border border-border/50">
-                      <div className="font-semibold font-modern text-lg text-primary">{event.count}</div>
-                      <div className="text-xs font-medium text-foreground mt-1">{event.event}</div>
-                      <div className="text-xs text-muted-foreground">{event.percentage}%</div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="col-span-full text-center py-8 text-muted-foreground">
-                    <MousePointer className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                    <p>No user interactions yet</p>
-                    <p className="text-xs mt-1">Button clicks and interactions will appear here</p>
-                  </div>
-                )}
-              </div>
+               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                 {stats.topEvents && stats.topEvents.length > 0 ? (
+                   stats.topEvents.map((event: any) => {
+                     const isCVDownload = event.event.toLowerCase().includes('cv download') || 
+                                        event.event.toLowerCase().includes('download') ||
+                                        event.event.toLowerCase().includes('resume');
+                     
+                     return (
+                       <div 
+                         key={event.event} 
+                         className={`text-center p-4 rounded-lg bg-card border border-border/50 transition-all duration-200 ${
+                           isCVDownload 
+                             ? 'hover:border-primary hover:shadow-md hover:scale-105 cursor-pointer' 
+                             : ''
+                         }`}
+                         onClick={isCVDownload ? () => setCvModalOpen(true) : undefined}
+                         title={isCVDownload ? 'Click to view detailed download information' : ''}
+                       >
+                         <div className="font-semibold font-modern text-lg text-primary">{event.count}</div>
+                         <div className="text-xs font-medium text-foreground mt-1">{event.event}</div>
+                         <div className="text-xs text-muted-foreground">{event.percentage}%</div>
+                         {isCVDownload && (
+                           <div className="text-xs text-primary mt-1 font-medium">Click for details →</div>
+                         )}
+                       </div>
+                     );
+                   })
+                 ) : (
+                   <div className="col-span-full text-center py-8 text-muted-foreground">
+                     <MousePointer className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                     <p>No user interactions yet</p>
+                     <p className="text-xs mt-1">Button clicks and interactions will appear here</p>
+                   </div>
+                 )}
+               </div>
             </CardContent>
           </Card>
 
@@ -443,6 +463,13 @@ const Analytics = () => {
           </div>
         </div>
       </main>
+      
+      {/* CV Clicks Modal */}
+      <CVClicksModal 
+        isOpen={cvModalOpen}
+        onClose={() => setCvModalOpen(false)}
+        timeRange={timeRange}
+      />
     </div>
   );
 };

@@ -1,0 +1,313 @@
+import { useState, useEffect } from "react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Loader2, Download, Globe, Clock, Monitor, Smartphone, X, RefreshCw } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+
+interface CVClicksModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  timeRange: string;
+}
+
+interface CVClickDetail {
+  id: string;
+  created_at: string;
+  event_data: any;
+  page_path: string;
+  session_id: string;
+  session_data?: {
+    device_type: string;
+    browser: string;
+    country: string;
+    referrer: string;
+  };
+}
+
+export const CVClicksModal = ({ isOpen, onClose, timeRange }: CVClicksModalProps) => {
+  const [clickDetails, setClickDetails] = useState<CVClickDetail[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [totalClicks, setTotalClicks] = useState(0);
+
+  const timeRanges = [
+    { value: "1d", label: "24h", days: 1 },
+    { value: "7d", label: "7 days", days: 7 },
+    { value: "30d", label: "30 days", days: 30 },
+    { value: "90d", label: "90 days", days: 90 },
+    { value: "180d", label: "6 months", days: 180 },
+    { value: "365d", label: "1 year", days: 365 },
+    { value: "all", label: "All data", days: 0 }
+  ];
+
+  const fetchCVClickDetails = async () => {
+    setLoading(true);
+    try {
+      const selectedRange = timeRanges.find(range => range.value === timeRange);
+      const days = selectedRange?.days || 7;
+      const shouldFilterByDate = days > 0;
+      
+      let startDate: string | undefined;
+      if (shouldFilterByDate) {
+        const date = new Date();
+        date.setDate(date.getDate() - days);
+        startDate = date.toISOString();
+      }
+
+      // Get CV download events
+      let eventsQuery = supabase
+        .from('analytics_events')
+        .select('*')
+        .eq('event_type', 'cv_download_click')
+        .order('created_at', { ascending: false });
+
+      if (startDate) {
+        eventsQuery = eventsQuery.gte('created_at', startDate);
+      }
+
+      const { data: events, error: eventsError } = await eventsQuery;
+
+      if (eventsError) throw eventsError;
+
+      setTotalClicks(events?.length || 0);
+
+      if (events && events.length > 0) {
+        // Get session details for each event
+        const sessionIds = events.map(event => event.session_id).filter(Boolean);
+        
+        if (sessionIds.length > 0) {
+          const { data: sessions, error: sessionsError } = await supabase
+            .from('analytics_sessions')
+            .select('session_id, device_type, browser, country, referrer')
+            .in('session_id', sessionIds);
+
+          if (sessionsError) throw sessionsError;
+
+          // Combine event and session data
+          const enrichedEvents = events.map(event => {
+            const sessionData = sessions?.find(session => session.session_id === event.session_id);
+            return {
+              ...event,
+              session_data: sessionData
+            };
+          });
+
+          setClickDetails(enrichedEvents);
+        } else {
+          setClickDetails(events);
+        }
+      } else {
+        setClickDetails([]);
+      }
+    } catch (error) {
+      console.error('Error fetching CV click details:', error);
+      setClickDetails([]);
+      setTotalClicks(0);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      fetchCVClickDetails();
+    }
+  }, [isOpen, timeRange]);
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
+  const getDeviceIcon = (deviceType: string) => {
+    if (deviceType === 'mobile' || deviceType === 'tablet') {
+      return <Smartphone className="h-4 w-4" />;
+    }
+    return <Monitor className="h-4 w-4" />;
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-6xl max-h-[80vh] overflow-hidden flex flex-col">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2 font-modern">
+            <Download className="h-5 w-5 text-primary" />
+            CV Download Details
+          </DialogTitle>
+          <DialogDescription className="font-modern">
+            Detailed information about CV downloads in the selected time period
+          </DialogDescription>
+        </DialogHeader>
+
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <div className="flex items-center space-x-2">
+              <Loader2 className="h-6 w-6 animate-spin" />
+              <span className="font-modern">Loading CV download data...</span>
+            </div>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-6 overflow-hidden">
+            {/* Summary Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium font-modern">Total Downloads</CardTitle>
+                  <Download className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold font-modern">{totalClicks}</div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium font-modern">Unique Countries</CardTitle>
+                  <Globe className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold font-modern">
+                    {new Set(clickDetails.map(click => click.session_data?.country).filter(Boolean)).size}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium font-modern">Device Types</CardTitle>
+                  <Monitor className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold font-modern">
+                    {new Set(clickDetails.map(click => click.session_data?.device_type).filter(Boolean)).size}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium font-modern">Browsers</CardTitle>
+                  <Globe className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold font-modern">
+                    {new Set(clickDetails.map(click => click.session_data?.browser).filter(Boolean)).size}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Detailed Table */}
+            <Card className="flex-1 overflow-hidden">
+              <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle className="font-modern">Download History</CardTitle>
+                  <CardDescription className="font-modern">
+                    Chronological list of all CV downloads
+                  </CardDescription>
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={fetchCVClickDetails}
+                  className="font-modern"
+                >
+                  <RefreshCw className="h-4 w-4 mr-2" />
+                  Refresh
+                </Button>
+              </CardHeader>
+              <CardContent className="overflow-auto max-h-[400px]">
+                {clickDetails.length > 0 ? (
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="font-modern">Date & Time</TableHead>
+                        <TableHead className="font-modern">Location</TableHead>
+                        <TableHead className="font-modern">Device</TableHead>
+                        <TableHead className="font-modern">Browser</TableHead>
+                        <TableHead className="font-modern">Source</TableHead>
+                        <TableHead className="font-modern">Referrer</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {clickDetails.map((click) => (
+                        <TableRow key={click.id}>
+                          <TableCell className="font-medium font-modern">
+                            <div className="flex items-center gap-2">
+                              <Clock className="h-4 w-4 text-muted-foreground" />
+                              {formatDate(click.created_at)}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center gap-2">
+                              <Globe className="h-4 w-4 text-muted-foreground" />
+                              <span className="font-modern">
+                                {click.session_data?.country || 'Unknown'}
+                              </span>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center gap-2">
+                              {getDeviceIcon(click.session_data?.device_type || '')}
+                              <span className="font-modern capitalize">
+                                {click.session_data?.device_type || 'Unknown'}
+                              </span>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <Badge variant="secondary" className="font-modern">
+                              {click.session_data?.browser || 'Unknown'}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>
+                            <Badge variant="outline" className="font-modern">
+                              {click.event_data?.source || click.page_path || 'Unknown'}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="font-modern text-sm text-muted-foreground">
+                            {click.session_data?.referrer ? (
+                              <a
+                                href={click.session_data.referrer}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="hover:text-primary underline-offset-4 hover:underline"
+                              >
+                                {new URL(click.session_data.referrer).hostname}
+                              </a>
+                            ) : (
+                              'Direct'
+                            )}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                ) : (
+                  <div className="text-center py-8 text-muted-foreground">
+                    <Download className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                    <p className="font-modern">No CV downloads in this time period</p>
+                    <p className="text-xs mt-1 font-modern">Downloads will appear here when visitors download your CV</p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        <div className="flex justify-end pt-4 border-t">
+          <Button onClick={onClose} variant="outline" className="font-modern">
+            <X className="h-4 w-4 mr-2" />
+            Close
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
