@@ -49,7 +49,7 @@ export function About() {
           </div>
 
           {/* Consultancy Services Headline */}
-          <div className="mb-6">
+          <div className="mb-6 text-center">
             <h3 className="text-xl font-semibold text-foreground mb-4">Consultancy services</h3>
           </div>
 
