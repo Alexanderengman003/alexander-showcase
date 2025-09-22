@@ -385,6 +385,21 @@ export const getAnalyticsStats = async (days: number = 7) => {
       }))
       .sort((a, b) => b.visits - a.visits); // Sort by most visits first
 
+    // City statistics - show every city that has visited
+    const cityStats = pageViews?.reduce((acc: any, view) => {
+      const city = view.city || 'Unknown';
+      acc[city] = (acc[city] || 0) + 1;
+      return acc;
+    }, {}) || {};
+
+    const allCities = Object.entries(cityStats)
+      .map(([city, visits]) => ({
+        city,
+        visits: visits as number,
+        percentage: totalViews > 0 ? (((visits as number) / totalViews) * 100).toFixed(1) : '0'
+      }))
+      .sort((a, b) => b.visits - a.visits); // Sort by most visits first
+
     return {
       totalViews,
       uniqueVisitors,
@@ -396,6 +411,7 @@ export const getAnalyticsStats = async (days: number = 7) => {
       trafficData,
       recentActivity: combinedActivity,
       allCountries,
+      allCities,
       topEvents,
       totalEvents: events?.length || 0
     };

@@ -372,8 +372,8 @@ const Analytics = () => {
             </Card>
           </div>
 
-          {/* Top Countries and Recent Activity Side by Side */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          {/* Countries, Cities, and Recent Activity */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
             {/* Countries */}
             <Card className="card-gradient">
               <CardHeader>
@@ -381,19 +381,19 @@ const Analytics = () => {
                 <CardDescription className="font-modern">All countries with visitors</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="h-[200px] overflow-y-auto">
+                <div className="h-[200px] overflow-y-auto pr-4">
                   <div className="space-y-4">
                     {stats.allCountries && stats.allCountries.length > 0 ? (
                       stats.allCountries.map((country: any, index: number) => (
-                        <div key={country.country} className="flex items-center justify-between">
-                          <div className="flex items-center space-x-3">
-                            <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
+                        <div key={country.country} className="flex items-center justify-between pr-2">
+                          <div className="flex items-center space-x-3 flex-1 min-w-0">
+                            <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                               <span className="text-xs font-semibold text-primary">{index + 1}</span>
                             </div>
-                            <Globe className="h-4 w-4 text-muted-foreground" />
-                            <span className="font-medium font-modern text-sm">{country.country}</span>
+                            <Globe className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                            <span className="font-medium font-modern text-sm truncate">{country.country}</span>
                           </div>
-                          <div className="text-right">
+                          <div className="text-right flex-shrink-0 ml-2">
                             <div className="font-semibold font-modern text-sm">{country.visits}</div>
                             <div className="text-xs text-muted-foreground">{country.percentage}%</div>
                           </div>
@@ -410,6 +410,42 @@ const Analytics = () => {
               </CardContent>
             </Card>
 
+            {/* Cities */}
+            <Card className="card-gradient">
+              <CardHeader>
+                <CardTitle className="font-modern">Cities</CardTitle>
+                <CardDescription className="font-modern">All cities with visitors</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-[200px] overflow-y-auto pr-4">
+                  <div className="space-y-4">
+                    {stats.allCities && stats.allCities.length > 0 ? (
+                      stats.allCities.map((city: any, index: number) => (
+                        <div key={city.city} className="flex items-center justify-between pr-2">
+                          <div className="flex items-center space-x-3 flex-1 min-w-0">
+                            <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                              <span className="text-xs font-semibold text-primary">{index + 1}</span>
+                            </div>
+                            <Globe className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                            <span className="font-medium font-modern text-sm truncate">{city.city}</span>
+                          </div>
+                          <div className="text-right flex-shrink-0 ml-2">
+                            <div className="font-semibold font-modern text-sm">{city.visits}</div>
+                            <div className="text-xs text-muted-foreground">{city.percentage}%</div>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="text-center py-4 text-muted-foreground">
+                        <Globe className="h-6 w-6 mx-auto mb-2 opacity-50" />
+                        <p className="text-xs">No city data yet</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
             {/* Recent Activity */}
             <Card className="card-gradient">
               <CardHeader>
@@ -418,10 +454,10 @@ const Analytics = () => {
               </CardHeader>
               <CardContent>
                 {stats.recentActivity && stats.recentActivity.length > 0 ? (
-                  <div className="h-[200px] overflow-y-auto pr-2">
+                  <div className="h-[200px] overflow-y-auto pr-4">
                     <div className="space-y-3">
                       {stats.recentActivity.map((activity: any, index: number) => (
-                        <div key={index} className="flex items-start space-x-3 p-2 rounded-lg hover:bg-muted/50 transition-colors">
+                        <div key={index} className="flex items-start space-x-3 p-2 rounded-lg hover:bg-muted/50 transition-colors pr-2">
                           <div className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 ${
                             activity.type === 'event' ? 'bg-green-500' : 'bg-primary'
                           }`} />
