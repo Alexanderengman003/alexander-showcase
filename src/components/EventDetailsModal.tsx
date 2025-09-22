@@ -4,16 +4,18 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Loader2, Download, Globe, Clock, Monitor, Smartphone, X, RefreshCw } from "lucide-react";
+import { Loader2, Globe, Clock, Monitor, Smartphone, X, RefreshCw, MousePointer, Filter, Mail, Palette, Eye, Download } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
-interface CVClicksModalProps {
+interface EventDetailsModalProps {
   isOpen: boolean;
   onClose: () => void;
+  eventType: string;
+  eventDisplayName: string;
   timeRange: string;
 }
 
-interface CVClickDetail {
+interface EventDetail {
   id: string;
   created_at: string;
   event_data: any;
@@ -27,10 +29,10 @@ interface CVClickDetail {
   };
 }
 
-export const CVClicksModal = ({ isOpen, onClose, timeRange }: CVClicksModalProps) => {
-  const [clickDetails, setClickDetails] = useState<CVClickDetail[]>([]);
+export const EventDetailsModal = ({ isOpen, onClose, eventType, eventDisplayName, timeRange }: EventDetailsModalProps) => {
+  const [eventDetails, setEventDetails] = useState<EventDetail[]>([]);
   const [loading, setLoading] = useState(true);
-  const [totalClicks, setTotalClicks] = useState(0);
+  const [totalEvents, setTotalEvents] = useState(0);
 
   const timeRanges = [
     { value: "1d", label: "24h", days: 1 },
@@ -42,7 +44,51 @@ export const CVClicksModal = ({ isOpen, onClose, timeRange }: CVClicksModalProps
     { value: "all", label: "All data", days: 0 }
   ];
 
-  const fetchCVClickDetails = async () => {
+  // Convert display names back to database event types
+  const getEventTypeFromDisplay = (displayName: string): string => {
+    const eventMap: { [key: string]: string } = {
+      'Cv Download Click': 'cv_download_click',
+      'Professional Filters Applied': 'professional_filters_applied',
+      'Contact Form Submit': 'contact_form_submit',
+      'Contact Form Submission': 'contact_form_submit',
+      'Theme Toggle': 'theme_toggle',
+      'Theme Change': 'theme_change',
+      'Page View': 'page_view',
+      'Button Click': 'button_click',
+      'Form Submit': 'form_submit',
+      'Navigation': 'navigation',
+      'Filter Applied': 'filter_applied'
+    };
+
+    // Try exact match first
+    if (eventMap[displayName]) {
+      return eventMap[displayName];
+    }
+
+    // Try converting display name back to snake_case
+    return displayName.toLowerCase().replace(/\s+/g, '_');
+  };
+
+  const getEventIcon = (eventType: string) => {
+    if (eventType.includes('download') || eventType.includes('cv')) {
+      return <Download className="h-5 w-5 text-primary" />;
+    }
+    if (eventType.includes('filter')) {
+      return <Filter className="h-5 w-5 text-primary" />;
+    }
+    if (eventType.includes('contact') || eventType.includes('form')) {
+      return <Mail className="h-5 w-5 text-primary" />;
+    }
+    if (eventType.includes('theme')) {
+      return <Palette className="h-5 w-5 text-primary" />;
+    }
+    if (eventType.includes('view')) {
+      return <Eye className="h-5 w-5 text-primary" />;
+    }
+    return <MousePointer className="h-5 w-5 text-primary" />;
+  };
+
+  const fetchEventDetails = async () => {
     setLoading(true);
     try {
       const selectedRange = timeRanges.find(range => range.value === timeRange);
@@ -56,11 +102,13 @@ export const CVClicksModal = ({ isOpen, onClose, timeRange }: CVClicksModalProps
         startDate = date.toISOString();
       }
 
-      // Get CV download events
+      const dbEventType = getEventTypeFromDisplay(eventDisplayName);
+
+      // Get events for this specific type
       let eventsQuery = supabase
         .from('analytics_events')
         .select('*')
-        .eq('event_type', 'cv_download_click')
+        .eq('event_type', dbEventType)
         .order('created_at', { ascending: false });
 
       if (startDate) {
@@ -71,7 +119,7 @@ export const CVClicksModal = ({ isOpen, onClose, timeRange }: CVClicksModalProps
 
       if (eventsError) throw eventsError;
 
-      setTotalClicks(events?.length || 0);
+      setTotalEvents(events?.length || 0);
 
       if (events && events.length > 0) {
         // Get session details for each event
@@ -94,27 +142,27 @@ export const CVClicksModal = ({ isOpen, onClose, timeRange }: CVClicksModalProps
             };
           });
 
-          setClickDetails(enrichedEvents);
+          setEventDetails(enrichedEvents);
         } else {
-          setClickDetails(events);
+          setEventDetails(events);
         }
       } else {
-        setClickDetails([]);
+        setEventDetails([]);
       }
     } catch (error) {
-      console.error('Error fetching CV click details:', error);
-      setClickDetails([]);
-      setTotalClicks(0);
+      console.error('Error fetching event details:', error);
+      setEventDetails([]);
+      setTotalEvents(0);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (isOpen) {
-      fetchCVClickDetails();
+    if (isOpen && eventDisplayName) {
+      fetchEventDetails();
     }
-  }, [isOpen, timeRange]);
+  }, [isOpen, eventDisplayName, timeRange]);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleString('en-US', {
@@ -133,16 +181,37 @@ export const CVClicksModal = ({ isOpen, onClose, timeRange }: CVClicksModalProps
     return <Monitor className="h-4 w-4" />;
   };
 
+  const formatEventData = (eventData: any, eventType: string) => {
+    if (!eventData) return 'N/A';
+    
+    if (eventType.includes('filter') && eventData.area) {
+      return `Area: ${eventData.area}`;
+    }
+    if (eventType.includes('filter') && eventData.technologies) {
+      return `Tech: ${eventData.technologies.join(', ')}`;
+    }
+    if (eventType.includes('theme') && eventData.theme) {
+      return `Theme: ${eventData.theme}`;
+    }
+    if (eventData.source) {
+      return `Source: ${eventData.source}`;
+    }
+    if (typeof eventData === 'object') {
+      return JSON.stringify(eventData);
+    }
+    return eventData.toString();
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-6xl max-h-[80vh] overflow-hidden flex flex-col">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 font-modern">
-            <Download className="h-5 w-5 text-primary" />
-            CV Download Details
+            {getEventIcon(eventType)}
+            {eventDisplayName} Details
           </DialogTitle>
           <DialogDescription className="font-modern">
-            Detailed information about CV downloads in the selected time period
+            Detailed information about {eventDisplayName.toLowerCase()} events in the selected time period
           </DialogDescription>
         </DialogHeader>
 
@@ -150,7 +219,7 @@ export const CVClicksModal = ({ isOpen, onClose, timeRange }: CVClicksModalProps
           <div className="flex items-center justify-center py-12">
             <div className="flex items-center space-x-2">
               <Loader2 className="h-6 w-6 animate-spin" />
-              <span className="font-modern">Loading CV download data...</span>
+              <span className="font-modern">Loading event data...</span>
             </div>
           </div>
         ) : (
@@ -159,11 +228,11 @@ export const CVClicksModal = ({ isOpen, onClose, timeRange }: CVClicksModalProps
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium font-modern">Total Downloads</CardTitle>
-                  <Download className="h-4 w-4 text-muted-foreground" />
+                  <CardTitle className="text-sm font-medium font-modern">Total Events</CardTitle>
+                  {getEventIcon(eventType)}
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold font-modern">{totalClicks}</div>
+                  <div className="text-2xl font-bold font-modern">{totalEvents}</div>
                 </CardContent>
               </Card>
 
@@ -174,7 +243,7 @@ export const CVClicksModal = ({ isOpen, onClose, timeRange }: CVClicksModalProps
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold font-modern">
-                    {new Set(clickDetails.map(click => click.session_data?.country).filter(Boolean)).size}
+                    {new Set(eventDetails.map(event => event.session_data?.country).filter(Boolean)).size}
                   </div>
                 </CardContent>
               </Card>
@@ -186,7 +255,7 @@ export const CVClicksModal = ({ isOpen, onClose, timeRange }: CVClicksModalProps
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold font-modern">
-                    {new Set(clickDetails.map(click => click.session_data?.device_type).filter(Boolean)).size}
+                    {new Set(eventDetails.map(event => event.session_data?.device_type).filter(Boolean)).size}
                   </div>
                 </CardContent>
               </Card>
@@ -198,7 +267,7 @@ export const CVClicksModal = ({ isOpen, onClose, timeRange }: CVClicksModalProps
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold font-modern">
-                    {new Set(clickDetails.map(click => click.session_data?.browser).filter(Boolean)).size}
+                    {new Set(eventDetails.map(event => event.session_data?.browser).filter(Boolean)).size}
                   </div>
                 </CardContent>
               </Card>
@@ -208,15 +277,15 @@ export const CVClicksModal = ({ isOpen, onClose, timeRange }: CVClicksModalProps
             <Card className="flex-1 overflow-hidden">
               <CardHeader className="flex flex-row items-center justify-between">
                 <div>
-                  <CardTitle className="font-modern">Download History</CardTitle>
+                  <CardTitle className="font-modern">Event History</CardTitle>
                   <CardDescription className="font-modern">
-                    Chronological list of all CV downloads
+                    Chronological list of all {eventDisplayName.toLowerCase()} events
                   </CardDescription>
                 </div>
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={fetchCVClickDetails}
+                  onClick={fetchEventDetails}
                   className="font-modern"
                 >
                   <RefreshCw className="h-4 w-4 mr-2" />
@@ -224,7 +293,7 @@ export const CVClicksModal = ({ isOpen, onClose, timeRange }: CVClicksModalProps
                 </Button>
               </CardHeader>
               <CardContent className="overflow-auto max-h-[400px]">
-                {clickDetails.length > 0 ? (
+                {eventDetails.length > 0 ? (
                   <Table>
                     <TableHeader>
                       <TableRow>
@@ -232,54 +301,58 @@ export const CVClicksModal = ({ isOpen, onClose, timeRange }: CVClicksModalProps
                         <TableHead className="font-modern">Location</TableHead>
                         <TableHead className="font-modern">Device</TableHead>
                         <TableHead className="font-modern">Browser</TableHead>
-                        <TableHead className="font-modern">Source</TableHead>
+                        <TableHead className="font-modern">Page</TableHead>
+                        <TableHead className="font-modern">Event Data</TableHead>
                         <TableHead className="font-modern">Referrer</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {clickDetails.map((click) => (
-                        <TableRow key={click.id}>
+                      {eventDetails.map((event) => (
+                        <TableRow key={event.id}>
                           <TableCell className="font-medium font-modern">
                             <div className="flex items-center gap-2">
                               <Clock className="h-4 w-4 text-muted-foreground" />
-                              {formatDate(click.created_at)}
+                              {formatDate(event.created_at)}
                             </div>
                           </TableCell>
                           <TableCell>
                             <div className="flex items-center gap-2">
                               <Globe className="h-4 w-4 text-muted-foreground" />
                               <span className="font-modern">
-                                {click.session_data?.country || 'Unknown'}
+                                {event.session_data?.country || 'Unknown'}
                               </span>
                             </div>
                           </TableCell>
                           <TableCell>
                             <div className="flex items-center gap-2">
-                              {getDeviceIcon(click.session_data?.device_type || '')}
+                              {getDeviceIcon(event.session_data?.device_type || '')}
                               <span className="font-modern capitalize">
-                                {click.session_data?.device_type || 'Unknown'}
+                                {event.session_data?.device_type || 'Unknown'}
                               </span>
                             </div>
                           </TableCell>
                           <TableCell>
                             <Badge variant="secondary" className="font-modern">
-                              {click.session_data?.browser || 'Unknown'}
+                              {event.session_data?.browser || 'Unknown'}
                             </Badge>
                           </TableCell>
                           <TableCell>
                             <Badge variant="outline" className="font-modern">
-                              {click.event_data?.source || click.page_path || 'Unknown'}
+                              {event.page_path === '/' ? 'Home' : event.page_path || 'Unknown'}
                             </Badge>
                           </TableCell>
+                          <TableCell className="font-modern text-sm">
+                            {formatEventData(event.event_data, eventType)}
+                          </TableCell>
                           <TableCell className="font-modern text-sm text-muted-foreground">
-                            {click.session_data?.referrer ? (
+                            {event.session_data?.referrer ? (
                               <a
-                                href={click.session_data.referrer}
+                                href={event.session_data.referrer}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="hover:text-primary underline-offset-4 hover:underline"
                               >
-                                {new URL(click.session_data.referrer).hostname}
+                                {new URL(event.session_data.referrer).hostname}
                               </a>
                             ) : (
                               'Direct'
@@ -291,9 +364,9 @@ export const CVClicksModal = ({ isOpen, onClose, timeRange }: CVClicksModalProps
                   </Table>
                 ) : (
                   <div className="text-center py-8 text-muted-foreground">
-                    <Download className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                    <p className="font-modern">No CV downloads in this time period</p>
-                    <p className="text-xs mt-1 font-modern">Downloads will appear here when visitors download your CV</p>
+                    {getEventIcon(eventType)}
+                    <p className="font-modern mt-2">No {eventDisplayName.toLowerCase()} events in this time period</p>
+                    <p className="text-xs mt-1 font-modern">Events will appear here when users interact with your site</p>
                   </div>
                 )}
               </CardContent>

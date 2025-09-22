@@ -26,7 +26,7 @@ import {
 } from "lucide-react";
 import { LineChart as RechartsLineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart as RechartsBarChart, Bar } from "recharts";
 import { getAnalyticsStats } from "@/lib/analytics";
-import { CVClicksModal } from "@/components/CVClicksModal";
+import { EventDetailsModal } from "@/components/EventDetailsModal";
 
 const Analytics = () => {
   // Don't track visits to the analytics page itself
@@ -34,7 +34,8 @@ const Analytics = () => {
   const [timeRange, setTimeRange] = useState("7d");
   const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [cvModalOpen, setCvModalOpen] = useState(false);
+  const [eventModalOpen, setEventModalOpen] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<{type: string, displayName: string} | null>(null);
 
   const timeRanges = [
     { value: "1d", label: "24h", days: 1 },
@@ -45,6 +46,14 @@ const Analytics = () => {
     { value: "365d", label: "1 year", days: 365 },
     { value: "all", label: "All data", days: 0 }
   ];
+
+  const handleEventClick = (eventDisplayName: string) => {
+    setSelectedEvent({
+      type: eventDisplayName.toLowerCase().replace(/\s+/g, '_'),
+      displayName: eventDisplayName
+    });
+    setEventModalOpen(true);
+  };
 
   const fetchAnalytics = async (days: number) => {
     setLoading(true);
@@ -248,31 +257,19 @@ const Analytics = () => {
             <CardContent>
                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                  {stats.topEvents && stats.topEvents.length > 0 ? (
-                   stats.topEvents.map((event: any) => {
-                     const isCVDownload = event.event.toLowerCase().includes('cv download') || 
-                                        event.event.toLowerCase().includes('download') ||
-                                        event.event.toLowerCase().includes('resume');
-                     
-                     return (
-                       <div 
-                         key={event.event} 
-                         className={`text-center p-4 rounded-lg bg-card border border-border/50 transition-all duration-200 ${
-                           isCVDownload 
-                             ? 'hover:border-primary hover:shadow-md hover:scale-105 cursor-pointer' 
-                             : ''
-                         }`}
-                         onClick={isCVDownload ? () => setCvModalOpen(true) : undefined}
-                         title={isCVDownload ? 'Click to view detailed download information' : ''}
-                       >
-                         <div className="font-semibold font-modern text-lg text-primary">{event.count}</div>
-                         <div className="text-xs font-medium text-foreground mt-1">{event.event}</div>
-                         <div className="text-xs text-muted-foreground">{event.percentage}%</div>
-                         {isCVDownload && (
-                           <div className="text-xs text-primary mt-1 font-medium">Click for details →</div>
-                         )}
-                       </div>
-                     );
-                   })
+                   stats.topEvents.map((event: any) => (
+                     <div 
+                       key={event.event} 
+                       className="text-center p-4 rounded-lg bg-card border border-border/50 transition-all duration-200 hover:border-primary hover:shadow-md hover:scale-105 cursor-pointer"
+                       onClick={() => handleEventClick(event.event)}
+                       title={`Click to view detailed ${event.event.toLowerCase()} information`}
+                     >
+                       <div className="font-semibold font-modern text-lg text-primary">{event.count}</div>
+                       <div className="text-xs font-medium text-foreground mt-1">{event.event}</div>
+                       <div className="text-xs text-muted-foreground">{event.percentage}%</div>
+                       <div className="text-xs text-primary mt-1 font-medium">Click for details →</div>
+                     </div>
+                   ))
                  ) : (
                    <div className="col-span-full text-center py-8 text-muted-foreground">
                      <MousePointer className="h-8 w-8 mx-auto mb-2 opacity-50" />
@@ -464,10 +461,15 @@ const Analytics = () => {
         </div>
       </main>
       
-      {/* CV Clicks Modal */}
-      <CVClicksModal 
-        isOpen={cvModalOpen}
-        onClose={() => setCvModalOpen(false)}
+      {/* Event Details Modal */}
+      <EventDetailsModal 
+        isOpen={eventModalOpen}
+        onClose={() => {
+          setEventModalOpen(false);
+          setSelectedEvent(null);
+        }}
+        eventType={selectedEvent?.type || ''}
+        eventDisplayName={selectedEvent?.displayName || ''}
         timeRange={timeRange}
       />
     </div>
