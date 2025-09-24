@@ -27,7 +27,7 @@ const ensureSessionExists = async (sessionId: string, geoData: { country?: strin
   try {
     const { data: existingSession, error: sessionError } = await supabase
       .from('analytics_sessions')
-      .select('id, first_visit_at')
+      .select('id, first_visit_at, referrer')
       .eq('session_id', sessionId)
       .maybeSingle();
 
@@ -53,7 +53,7 @@ const ensureSessionExists = async (sessionId: string, geoData: { country?: strin
               session_id: sessionId,
               device_type: getDeviceType(),
               browser: getBrowser(),
-              referrer: document.referrer || null,
+              referrer: inferReferrer(),
               country: geoData.country || null,
             });
         }
@@ -69,6 +69,17 @@ const ensureSessionExists = async (sessionId: string, geoData: { country?: strin
       
       if (sessionAge < fiveMinutesInMs) {
         console.log('Session is recent, treating as same session');
+      }
+
+      // Backfill referrer if missing on existing session
+      if (!existingSession.referrer) {
+        const inferred = inferReferrer();
+        if (inferred) {
+          await supabase
+            .from('analytics_sessions')
+            .update({ referrer: inferred })
+            .eq('session_id', sessionId);
+        }
       }
     }
   } catch (error) {
@@ -108,6 +119,47 @@ const getOperatingSystem = (): string => {
   if (userAgent.includes('Android')) return 'Android';
   if (userAgent.includes('iOS')) return 'iOS';
   return 'Other';
+};
+
+// Infer referrer from document, UTM parameters, or in-app browser user agents
+const inferReferrer = (): string | null => {
+  try {
+    if (document.referrer) return document.referrer;
+  } catch {}
+
+  try {
+    const url = new URL(window.location.href);
+    const utm = url.searchParams.get('utm_source') || url.searchParams.get('source') || url.searchParams.get('ref');
+    if (utm) {
+      const source = utm.toLowerCase();
+      const map: Record<string, string> = {
+        linkedin: 'https://www.linkedin.com/',
+        li: 'https://www.linkedin.com/',
+        facebook: 'https://www.facebook.com/',
+        fb: 'https://www.facebook.com/',
+        instagram: 'https://www.instagram.com/',
+        ig: 'https://www.instagram.com/',
+        twitter: 'https://twitter.com/',
+        x: 'https://x.com/',
+        reddit: 'https://www.reddit.com/',
+        youtube: 'https://www.youtube.com/',
+        whatsapp: 'https://www.whatsapp.com/',
+        telegram: 'https://t.me/',
+      };
+      return map[source] || `https://${source}.com/`;
+    }
+  } catch {}
+
+  const ua = navigator.userAgent.toLowerCase();
+  if (ua.includes('linkedin')) return 'https://www.linkedin.com/';
+  if (ua.includes('instagram')) return 'https://www.instagram.com/';
+  if (ua.includes('fb') || ua.includes('facebook')) return 'https://www.facebook.com/';
+  if (ua.includes('twitter') || ua.includes('x/')) return 'https://twitter.com/';
+  if (ua.includes('reddit')) return 'https://www.reddit.com/';
+  if (ua.includes('whatsapp')) return 'https://www.whatsapp.com/';
+  if (ua.includes('tiktok')) return 'https://www.tiktok.com/';
+
+  return null;
 };
 
 // Get geographical information based on IP
@@ -152,7 +204,7 @@ export const trackPageView = async (pagePath: string, pageTitle: string) => {
       .insert({
         page_path: pagePath,
         page_title: pageTitle,
-        referrer: document.referrer || null,
+        referrer: inferReferrer(),
         user_agent: navigator.userAgent,
         device_type: getDeviceType(),
         browser: getBrowser(),
