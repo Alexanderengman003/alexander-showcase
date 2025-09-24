@@ -449,9 +449,13 @@ export const getAnalyticsStats = async (days: number = 7) => {
     const combinedActivity = [...recentPageViews, ...recentEvents]
       .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 
-    // Event statistics - combine Click and Link click into one category
+    // Event statistics - combine Filter applied and Filter into one category
     const eventStats = events?.reduce((acc: any, event) => {
       let eventType = event.event_type;
+      // Normalize event types - combine Filter applied and Filter into just Filter
+      if (eventType === 'Filter applied') {
+        eventType = 'Filter';
+      }
       // Normalize event types - combine Link click and Click into just Click
       if (eventType === 'Link click') {
         eventType = 'Click';
