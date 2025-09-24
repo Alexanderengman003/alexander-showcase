@@ -290,10 +290,9 @@ const Analytics = () => {
                        onClick={() => handleEventClick(event.event)}
                        title={`Click to view detailed ${event.event.toLowerCase()} information`}
                      >
-                       <div className="font-semibold font-modern text-lg text-primary">{event.count}</div>
-                       <div className="text-xs font-medium text-foreground mt-1">{event.event}</div>
-                       <div className="text-xs text-muted-foreground">{event.percentage}%</div>
-                       <div className="text-xs text-primary mt-1 font-medium">Click for details →</div>
+                        <div className="font-semibold font-modern text-lg text-primary">{event.count}</div>
+                        <div className="text-xs font-medium text-foreground mt-1">{event.event}</div>
+                        <div className="text-xs text-muted-foreground">{event.percentage}%</div>
                      </div>
                    ))
                  ) : (
@@ -322,17 +321,17 @@ const Analytics = () => {
                           const [section, part] = (filterStat.filter as string).split(': ');
                           const [filterType, value] = part ? part.split(' = ') : ['', ''];
                           return (
-                            <div key={filterStat.filter} className="flex items-center justify-between pr-2">
-                              <div className="flex items-center space-x-3 flex-1 min-w-0">
+                            <div key={filterStat.filter} className="flex items-start justify-between pr-2">
+                              <div className="flex items-start space-x-4 flex-1 min-w-0">
                                 <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                                   <span className="text-xs font-semibold text-primary">{index + 1}</span>
                                 </div>
-                                <div className="flex items-center gap-2 flex-1 min-w-0">
-                                  <span className="font-medium font-modern text-sm truncate">{value || filterType}</span>
-                                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary flex-shrink-0">{section}</span>
+                                <div className="flex-1 min-w-0">
+                                  <div className="font-medium font-modern text-sm truncate">{value || filterType}</div>
+                                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary inline-block mt-1">{section}</span>
                                 </div>
                               </div>
-                              <div className="text-right flex-shrink-0 ml-2">
+                              <div className="text-right flex-shrink-0 ml-4">
                                 <div className="font-semibold font-modern text-sm">{filterStat.count}</div>
                                 <div className="text-xs text-muted-foreground">{filterStat.percentage}%</div>
                               </div>
@@ -369,19 +368,19 @@ const Analytics = () => {
                         const action = clickAction || clickStat.click;
                         
                         return (
-                          <div key={clickStat.click} className="flex items-center justify-between pr-2">
-                            <div className="flex items-center space-x-3 flex-1 min-w-0">
+                          <div key={clickStat.click} className="flex items-start justify-between pr-2">
+                            <div className="flex items-start space-x-4 flex-1 min-w-0">
                               <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                                 <span className="text-xs font-semibold text-primary">{index + 1}</span>
                               </div>
-                              <div className="flex items-center gap-2 flex-1 min-w-0">
-                                <span className="font-medium font-modern text-sm truncate">{action}</span>
+                              <div className="flex-1 min-w-0">
+                                <div className="font-medium font-modern text-sm truncate">{action}</div>
                                 {possibleSection && (
-                                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary flex-shrink-0">{section}</span>
+                                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary inline-block mt-1">{section}</span>
                                 )}
                               </div>
                             </div>
-                            <div className="text-right flex-shrink-0 ml-2">
+                            <div className="text-right flex-shrink-0 ml-4">
                               <div className="font-semibold font-modern text-sm">{clickStat.count}</div>
                               <div className="text-xs text-muted-foreground">{clickStat.percentage}%</div>
                             </div>
@@ -543,9 +542,6 @@ const Analytics = () => {
                                 <div className="text-xs text-muted-foreground mt-1 opacity-75">
                                   {activity.data.source && `Source: ${activity.data.source}`}
                                 </div>
-                              )}
-                              {(activity.type === 'event' || activity.type === 'page_view') && (
-                                <div className="text-xs text-primary mt-1 font-medium">Click for details →</div>
                               )}
                             </div>
                           </div>

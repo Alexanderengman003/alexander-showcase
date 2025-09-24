@@ -128,12 +128,6 @@ const ActivityDetailsModal: React.FC<ActivityDetailsModalProps> = ({
                     <span className="font-medium">{activity.data.value}</span>
                   </div>
                 )}
-                {activity.data.type && (
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Click Type:</span>
-                    <span className="font-medium">{activity.data.type}</span>
-                  </div>
-                )}
                 {activity.data.item && (
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-muted-foreground">Item Clicked:</span>
