@@ -97,6 +97,23 @@ export const ReferrerDetailsModal = ({ isOpen, onClose, timeRange }: ReferrerDet
           </div>
         ) : referrerData ? (
           <div className="flex flex-col gap-6 overflow-hidden">
+            {/* Header with Refresh Button */}
+            <div className="flex justify-between items-center mb-4">
+              <div>
+                <h3 className="text-lg font-semibold font-modern">Traffic Sources Overview</h3>
+                <p className="text-sm text-muted-foreground font-modern">How users found your site</p>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={fetchReferrerData}
+                className="font-modern"
+              >
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Refresh
+              </Button>
+            </div>
+
             {/* Summary Cards */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <Card>
