@@ -263,27 +263,36 @@ export const getAnalyticsStats = async (days: number = 7) => {
     
     const avgSessionTime = uniqueVisitors > 0 ? Math.round(totalDuration / uniqueVisitors) : 0;
 
-    // Top pages - normalize page names properly
-    const pageStats = pageViews?.reduce((acc: any, view) => {
-      let page = view.page_path === '/' ? 'Home' : view.page_path.replace('/', '').replace('#', '');
-      // Normalize common variations to prevent duplicates
-      page = page.toLowerCase() === 'home' || page === '' ? 'Home' : page;
-      // Capitalize first letter for consistency
-      if (page !== 'Home') {
-        page = page.charAt(0).toUpperCase() + page.slice(1);
+    // Top sections - extract sections from page paths and events
+    const sectionStats: any = {};
+    
+    // From page views
+    pageViews?.forEach(view => {
+      let section = 'Home';
+      if (view.page_path && view.page_path !== '/') {
+        const path = view.page_path.replace('/#', '').replace('#', '');
+        section = path.charAt(0).toUpperCase() + path.slice(1) || 'Home';
       }
-      acc[page] = (acc[page] || 0) + 1;
-      return acc;
-    }, {}) || {};
+      sectionStats[section] = (sectionStats[section] || 0) + 1;
+    });
+    
+    // From events with section data
+    events?.forEach(event => {
+      const eventData = event.event_data as any;
+      if (eventData && eventData.section) {
+        const section = eventData.section;
+        sectionStats[section] = (sectionStats[section] || 0) + 1;
+      }
+    });
 
-    const topPages = Object.entries(pageStats)
-      .map(([page, views]) => ({
-        page,
-        views: views as number,
-        percentage: totalViews > 0 ? ((views as number / totalViews) * 100).toFixed(1) : '0'
+    const topSections = Object.entries(sectionStats)
+      .map(([section, count]) => ({
+        section,
+        count: count as number,
+        percentage: totalViews > 0 ? (((count as number) / totalViews) * 100).toFixed(1) : '0'
       }))
-      .sort((a, b) => b.views - a.views)
-      .slice(0, 5);
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 10);
 
     // Device types
     const deviceStats = sessions?.reduce((acc: any, session) => {
@@ -496,9 +505,8 @@ export const getAnalyticsStats = async (days: number = 7) => {
       uniqueVisitors,
       bounceRate: Math.round(bounceRate * 10) / 10,
       avgSessionTime: formatDuration(avgSessionTime),
-      topPages,
+      topSections,
       deviceTypes,
-      filterUsage,
       topFilterStats,
       topClickStats,
       trafficData,

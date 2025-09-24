@@ -307,110 +307,72 @@ const Analytics = () => {
             </CardContent>
           </Card>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-            {/* Top Pages */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            {/* Filter Statistics */}
             <Card className="card-gradient">
               <CardHeader>
-                <CardTitle className="font-modern">Top Pages</CardTitle>
-                <CardDescription className="font-modern">Most viewed pages</CardDescription>
+                <CardTitle className="font-modern">Filter Statistics</CardTitle>
+                <CardDescription className="font-modern">Top 5 most used filters</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="h-[200px] overflow-y-auto">
+                <div className="h-[200px] overflow-y-auto pr-4">
                   <div className="space-y-4">
-                    {stats.topPages.slice(0, 10).map((page: any, index: number) => (
-                      <div key={page.page} className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-semibold">
-                            {index + 1}
+                    {stats.topFilterStats && stats.topFilterStats.length > 0 ? (
+                      stats.topFilterStats.map((filterStat: any, index: number) => (
+                        <div key={filterStat.filter} className="flex items-center justify-between pr-2">
+                          <div className="flex items-center space-x-3 flex-1 min-w-0">
+                            <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                              <span className="text-xs font-semibold text-primary">{index + 1}</span>
+                            </div>
+                            <Filter className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                            <span className="font-medium font-modern text-sm truncate">{filterStat.filter}</span>
                           </div>
-                          <span className="font-medium font-modern text-sm">{page.page}</span>
+                          <div className="text-right flex-shrink-0 ml-2">
+                            <div className="font-semibold font-modern text-sm">{filterStat.count}</div>
+                            <div className="text-xs text-muted-foreground">{filterStat.percentage}%</div>
+                          </div>
                         </div>
-                        <div className="text-right">
-                          <div className="font-semibold font-modern text-sm">{page.views}</div>
-                          <div className="text-xs text-muted-foreground">{page.percentage}%</div>
-                        </div>
+                      ))
+                    ) : (
+                      <div className="text-center py-4 text-muted-foreground">
+                        <Filter className="h-6 w-6 mx-auto mb-2 opacity-50" />
+                        <p className="text-xs">No filter data yet</p>
                       </div>
-                    ))}
+                    )}
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Device Types */}
+            {/* Click Statistics */}
             <Card className="card-gradient">
               <CardHeader>
-                <CardTitle className="font-modern">Device Types</CardTitle>
-                <CardDescription className="font-modern">Visitor devices</CardDescription>
+                <CardTitle className="font-modern">Click Statistics</CardTitle>
+                <CardDescription className="font-modern">Top 5 most clicked items</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  {stats.deviceTypes.map((device: any) => (
-                    <div key={device.type} className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        {device.type === "Desktop" && <Monitor className="h-4 w-4 text-muted-foreground" />}
-                        {device.type === "Mobile" && <Smartphone className="h-4 w-4 text-muted-foreground" />}
-                        {device.type === "Tablet" && <Smartphone className="h-4 w-4 text-muted-foreground" />}
-                        <span className="font-medium font-modern text-sm">{device.type}</span>
-                      </div>
-                      <div className="text-right">
-                        <div className="font-semibold font-modern text-sm">{device.count}</div>
-                        <div className="text-xs text-muted-foreground">{device.percentage}%</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Filter Usage */}
-            <Card className="card-gradient">
-              <CardHeader>
-                <CardTitle className="font-modern">Filter Usage</CardTitle>
-                <CardDescription className="font-modern">Most applied filters across all sections</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="h-[200px] overflow-y-auto">
+                <div className="h-[200px] overflow-y-auto pr-4">
                   <div className="space-y-4">
-                    {stats.filterUsage && stats.filterUsage.length > 0 ? (
-                      stats.filterUsage.slice(0, 10).map((filterItem: any) => {
-                        // Parse the filter format: "Section: filter = value"
-                        const [section, filterPart] = filterItem.filter.split(': ');
-                        const [filterType, value] = filterPart ? filterPart.split(' = ') : ['', ''];
-                        
-                        // Get appropriate icon based on filter type
-                        const getFilterIcon = () => {
-                          if (filterType === 'area') return <Settings className="h-4 w-4 text-muted-foreground" />;
-                          if (filterType === 'technology') return <Filter className="h-4 w-4 text-muted-foreground" />;
-                          if (filterType === 'software') return <Monitor className="h-4 w-4 text-muted-foreground" />;
-                          if (filterType === 'category') return <Filter className="h-4 w-4 text-muted-foreground" />;
-                          if (filterType === 'view_mode') return <Eye className="h-4 w-4 text-muted-foreground" />;
-                          return <Filter className="h-4 w-4 text-muted-foreground" />;
-                        };
-                        
-                        return (
-                          <div key={filterItem.filter} className="flex items-start justify-between">
-                            <div className="flex items-start space-x-3 flex-1 min-w-0">
-                              {getFilterIcon()}
-                              <div className="flex-1 min-w-0">
-                                <div className="font-medium font-modern text-sm truncate">
-                                  {section}
-                                </div>
-                                <div className="text-xs text-muted-foreground">
-                                  {filterType}: <span className="font-medium">{value}</span>
-                                </div>
-                              </div>
+                    {stats.topClickStats && stats.topClickStats.length > 0 ? (
+                      stats.topClickStats.map((clickStat: any, index: number) => (
+                        <div key={clickStat.click} className="flex items-center justify-between pr-2">
+                          <div className="flex items-center space-x-3 flex-1 min-w-0">
+                            <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                              <span className="text-xs font-semibold text-primary">{index + 1}</span>
                             </div>
-                            <div className="text-right flex-shrink-0 ml-2">
-                              <div className="font-semibold font-modern text-sm">{filterItem.count}</div>
-                              <div className="text-xs text-muted-foreground">{filterItem.percentage}%</div>
-                            </div>
+                            <MousePointer className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                            <span className="font-medium font-modern text-sm truncate">{clickStat.click}</span>
                           </div>
-                        );
-                      })
+                          <div className="text-right flex-shrink-0 ml-2">
+                            <div className="font-semibold font-modern text-sm">{clickStat.count}</div>
+                            <div className="text-xs text-muted-foreground">{clickStat.percentage}%</div>
+                          </div>
+                        </div>
+                      ))
                     ) : (
                       <div className="text-center py-4 text-muted-foreground">
-                        <Filter className="h-6 w-6 mx-auto mb-2 opacity-50" />
-                        <p className="text-xs">No filter usage data yet</p>
+                        <MousePointer className="h-6 w-6 mx-auto mb-2 opacity-50" />
+                        <p className="text-xs">No click data yet</p>
                       </div>
                     )}
                   </div>
@@ -419,8 +381,8 @@ const Analytics = () => {
             </Card>
           </div>
 
-          {/* Countries, Cities, and Recent Activity */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+          {/* Countries and Cities */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
             {/* Countries */}
             <Card className="card-gradient">
               <CardHeader>
@@ -492,75 +454,60 @@ const Analytics = () => {
                 </div>
               </CardContent>
             </Card>
+          </div>
 
-            {/* Filter Statistics */}
+          {/* Recent Activity, Device Types, and Top Sections */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+            {/* Top Sections */}
             <Card className="card-gradient">
               <CardHeader>
-                <CardTitle className="font-modern">Filter Statistics</CardTitle>
-                <CardDescription className="font-modern">Top 5 most used filters</CardDescription>
+                <CardTitle className="font-modern">Top Sections</CardTitle>
+                <CardDescription className="font-modern">Most popular sections</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="h-[200px] overflow-y-auto pr-4">
+                <div className="h-[200px] overflow-y-auto">
                   <div className="space-y-4">
-                    {stats.topFilterStats && stats.topFilterStats.length > 0 ? (
-                      stats.topFilterStats.map((filterStat: any, index: number) => (
-                        <div key={filterStat.filter} className="flex items-center justify-between pr-2">
-                          <div className="flex items-center space-x-3 flex-1 min-w-0">
-                            <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                              <span className="text-xs font-semibold text-primary">{index + 1}</span>
-                            </div>
-                            <Filter className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                            <span className="font-medium font-modern text-sm truncate">{filterStat.filter}</span>
+                    {stats.topSections.slice(0, 10).map((section: any, index: number) => (
+                      <div key={section.section} className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-semibold">
+                            {index + 1}
                           </div>
-                          <div className="text-right flex-shrink-0 ml-2">
-                            <div className="font-semibold font-modern text-sm">{filterStat.count}</div>
-                            <div className="text-xs text-muted-foreground">{filterStat.percentage}%</div>
-                          </div>
+                          <span className="font-medium font-modern text-sm">{section.section}</span>
                         </div>
-                      ))
-                    ) : (
-                      <div className="text-center py-4 text-muted-foreground">
-                        <Filter className="h-6 w-6 mx-auto mb-2 opacity-50" />
-                        <p className="text-xs">No filter data yet</p>
+                        <div className="text-right">
+                          <div className="font-semibold font-modern text-sm">{section.count}</div>
+                          <div className="text-xs text-muted-foreground">{section.percentage}%</div>
+                        </div>
                       </div>
-                    )}
+                    ))}
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Click Statistics */}
+            {/* Device Types */}
             <Card className="card-gradient">
               <CardHeader>
-                <CardTitle className="font-modern">Click Statistics</CardTitle>
-                <CardDescription className="font-modern">Top 5 most clicked items</CardDescription>
+                <CardTitle className="font-modern">Device Types</CardTitle>
+                <CardDescription className="font-modern">Visitor devices</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="h-[200px] overflow-y-auto pr-4">
-                  <div className="space-y-4">
-                    {stats.topClickStats && stats.topClickStats.length > 0 ? (
-                      stats.topClickStats.map((clickStat: any, index: number) => (
-                        <div key={clickStat.click} className="flex items-center justify-between pr-2">
-                          <div className="flex items-center space-x-3 flex-1 min-w-0">
-                            <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                              <span className="text-xs font-semibold text-primary">{index + 1}</span>
-                            </div>
-                            <MousePointer className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                            <span className="font-medium font-modern text-sm truncate">{clickStat.click}</span>
-                          </div>
-                          <div className="text-right flex-shrink-0 ml-2">
-                            <div className="font-semibold font-modern text-sm">{clickStat.count}</div>
-                            <div className="text-xs text-muted-foreground">{clickStat.percentage}%</div>
-                          </div>
-                        </div>
-                      ))
-                    ) : (
-                      <div className="text-center py-4 text-muted-foreground">
-                        <MousePointer className="h-6 w-6 mx-auto mb-2 opacity-50" />
-                        <p className="text-xs">No click data yet</p>
+                <div className="space-y-4">
+                  {stats.deviceTypes.map((device: any) => (
+                    <div key={device.type} className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        {device.type === "Desktop" && <Monitor className="h-4 w-4 text-muted-foreground" />}
+                        {device.type === "Mobile" && <Smartphone className="h-4 w-4 text-muted-foreground" />}
+                        {device.type === "Tablet" && <Smartphone className="h-4 w-4 text-muted-foreground" />}
+                        <span className="font-medium font-modern text-sm">{device.type}</span>
                       </div>
-                    )}
-                  </div>
+                      <div className="text-right">
+                        <div className="font-semibold font-modern text-sm">{device.count}</div>
+                        <div className="text-xs text-muted-foreground">{device.percentage}%</div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </CardContent>
             </Card>
