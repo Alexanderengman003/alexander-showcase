@@ -456,8 +456,8 @@ const Analytics = () => {
             </Card>
           </div>
 
-          {/* Recent Activity, Device Types, and Top Sections */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+          {/* Top Sections and Recent Activity */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
             {/* Top Sections */}
             <Card className="card-gradient">
               <CardHeader>
@@ -482,32 +482,6 @@ const Analytics = () => {
                       </div>
                     ))}
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Device Types */}
-            <Card className="card-gradient">
-              <CardHeader>
-                <CardTitle className="font-modern">Device Types</CardTitle>
-                <CardDescription className="font-modern">Visitor devices</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {stats.deviceTypes.map((device: any) => (
-                    <div key={device.type} className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        {device.type === "Desktop" && <Monitor className="h-4 w-4 text-muted-foreground" />}
-                        {device.type === "Mobile" && <Smartphone className="h-4 w-4 text-muted-foreground" />}
-                        {device.type === "Tablet" && <Smartphone className="h-4 w-4 text-muted-foreground" />}
-                        <span className="font-medium font-modern text-sm">{device.type}</span>
-                      </div>
-                      <div className="text-right">
-                        <div className="font-semibold font-modern text-sm">{device.count}</div>
-                        <div className="text-xs text-muted-foreground">{device.percentage}%</div>
-                      </div>
-                    </div>
-                  ))}
                 </div>
               </CardContent>
             </Card>
