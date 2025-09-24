@@ -237,35 +237,27 @@ export function Professional() {
                 {areas.map((area) => (
                   <button
                     key={area}
-                    onClick={() => {
-                      track("Filter", { 
-                        type: 'area_filter',
-                        section: "Professional Experience",
-                        action: 'area_button_click',
-                        filter: "area",
-                        value: area,
-                        item: `${area} area button`
-                      });
-                      setSelectedArea(area);
-                      
-                      // Track comprehensive filter state
-                      track("Filter", {
-                        type: 'area_filter',
-                        section: "Professional Experience",
-                        action: 'area_comprehensive',
-                        filter: "area",
-                        value: area,
-                        item: `${area} area comprehensive filter`,
-                        totalResults: professionalRoles.filter(role => {
-                          const areaMatch = area === "All" || role.area.includes(area);
-                          const techMatch = selectedTechnologies.length === 0 || 
-                            selectedTechnologies.every(tech => role.technologies.includes(tech));
-                          const softwareMatch = selectedSoftware.length === 0 || 
-                            selectedSoftware.every(software => role.software.includes(software));
-                          return areaMatch && techMatch && softwareMatch;
-                        }).length
-                      });
-                    }}
+                     onClick={() => {
+                       setSelectedArea(area);
+                       
+                       // Track filter selection
+                       track("Filter", {
+                         type: 'area_filter',
+                         section: "Professional Experience",
+                         action: 'area_selection',
+                         filter: "area",
+                         value: area,
+                         item: `${area} area button`,
+                         totalResults: professionalRoles.filter(role => {
+                           const areaMatch = area === "All" || role.area.includes(area);
+                           const techMatch = selectedTechnologies.length === 0 || 
+                             selectedTechnologies.every(tech => role.technologies.includes(tech));
+                           const softwareMatch = selectedSoftware.length === 0 || 
+                             selectedSoftware.every(software => role.software.includes(software));
+                           return areaMatch && techMatch && softwareMatch;
+                         }).length
+                       });
+                     }}
                     className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
                       selectedArea === area
                         ? "bg-background text-foreground shadow-sm"

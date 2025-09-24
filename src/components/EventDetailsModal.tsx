@@ -177,11 +177,11 @@ export const EventDetailsModal = ({ isOpen, onClose, eventType, eventDisplayName
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleString('en-US', {
-      year: 'numeric',
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
+      hour12: false
     });
   };
 
@@ -308,25 +308,27 @@ export const EventDetailsModal = ({ isOpen, onClose, eventType, eventDisplayName
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead className="font-modern">Date & Time</TableHead>
-                        <TableHead className="font-modern">Location</TableHead>
-                        <TableHead className="font-modern">Device</TableHead>
-                        <TableHead className="font-modern">Browser</TableHead>
-                        <TableHead className="font-modern">Page</TableHead>
-                        <TableHead className="font-modern">Section</TableHead>
-                        <TableHead className="font-modern">Item</TableHead>
-                        <TableHead className="font-modern">Type</TableHead>
-                        <TableHead className="font-modern">URL/Value</TableHead>
-                        <TableHead className="font-modern">Referrer</TableHead>
+                        <TableHead className="font-modern w-32">Date & Time</TableHead>
+                        <TableHead className="font-modern w-24">Location</TableHead>
+                        <TableHead className="font-modern w-20">Device</TableHead>
+                        <TableHead className="font-modern w-20">Browser</TableHead>
+                        <TableHead className="font-modern w-16">Page</TableHead>
+                        <TableHead className="font-modern w-24">Section</TableHead>
+                        <TableHead className="font-modern w-32">Item</TableHead>
+                        <TableHead className="font-modern w-20">Type</TableHead>
+                        <TableHead className="font-modern w-32">URL/Value</TableHead>
+                        <TableHead className="font-modern w-24">Referrer</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {eventDetails.map((event) => (
                         <TableRow key={event.id}>
-                          <TableCell className="font-medium font-modern">
-                            <div className="flex items-center gap-2">
-                              <Clock className="h-4 w-4 text-muted-foreground" />
-                              {formatDate(event.created_at)}
+                          <TableCell className="font-medium font-modern text-xs">
+                            <div className="flex flex-col gap-1">
+                              <div className="flex items-center gap-1">
+                                <Clock className="h-3 w-3 text-muted-foreground" />
+                                <span className="whitespace-nowrap">{formatDate(event.created_at)}</span>
+                              </div>
                             </div>
                           </TableCell>
                           <TableCell>
