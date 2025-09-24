@@ -19,6 +19,7 @@ import {
   ArrowUpRight,
   ArrowDownRight,
   Loader2,
+  RefreshCw,
   Sun,
   Moon,
   Filter,
@@ -127,21 +128,38 @@ const Analytics = () => {
               </p>
             </div>
             
-            {/* Time Range Selector */}
-            <div className="mt-6 sm:mt-0">
-            <div className="flex flex-wrap gap-2 sm:inline-flex sm:rounded-lg sm:bg-muted sm:p-1">
-              {timeRanges.map((range) => (
-                <Button
-                  key={range.value}
-                  onClick={() => setTimeRange(range.value)}
-                  variant={timeRange === range.value ? "default" : "ghost"}
-                  size="sm"
-                  className="font-modern text-xs sm:text-sm"
-                >
-                  {range.label}
-                </Button>
-              ))}
-            </div>
+            {/* Time Range Selector and Refresh Button */}
+            <div className="mt-6 sm:mt-0 flex flex-col sm:flex-row gap-4 sm:gap-6 items-start sm:items-center">
+              <div className="flex flex-wrap gap-2 sm:inline-flex sm:rounded-lg sm:bg-muted sm:p-1">
+                {timeRanges.map((range) => (
+                  <Button
+                    key={range.value}
+                    onClick={() => setTimeRange(range.value)}
+                    variant={timeRange === range.value ? "default" : "ghost"}
+                    size="sm"
+                    className="font-modern text-xs sm:text-sm"
+                  >
+                    {range.label}
+                  </Button>
+                ))}
+              </div>
+              <Button
+                onClick={() => {
+                  const selectedRange = timeRanges.find(range => range.value === timeRange);
+                  fetchAnalytics(selectedRange?.days || 7);
+                }}
+                variant="outline"
+                size="sm"
+                disabled={loading}
+                className="font-modern"
+              >
+                {loading ? (
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                ) : (
+                  <RefreshCw className="h-4 w-4 mr-2" />
+                )}
+                Refresh
+              </Button>
             </div>
           </div>
 

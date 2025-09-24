@@ -180,7 +180,12 @@ export const trackEvent = async (eventType: string, eventData?: any, pagePath?: 
         // If we have a hash, use that as the page
         return hash;
       } else if (pathname === '/' || pathname === '') {
-        // If we're on the home page, return home
+        // Check if we're in a specific section based on scroll position or URL fragment
+        const url = new URL(window.location.href);
+        if (url.hash) {
+          return url.hash;
+        }
+        // If no hash, try to determine section from scroll position or just return home
         return '/';
       } else {
         // Otherwise use the pathname

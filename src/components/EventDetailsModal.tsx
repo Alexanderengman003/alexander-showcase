@@ -313,7 +313,10 @@ export const EventDetailsModal = ({ isOpen, onClose, eventType, eventDisplayName
                         <TableHead className="font-modern">Device</TableHead>
                         <TableHead className="font-modern">Browser</TableHead>
                         <TableHead className="font-modern">Page</TableHead>
-                        <TableHead className="font-modern">Event Data</TableHead>
+                        <TableHead className="font-modern">Section</TableHead>
+                        <TableHead className="font-modern">Item</TableHead>
+                        <TableHead className="font-modern">Type</TableHead>
+                        <TableHead className="font-modern">URL/Value</TableHead>
                         <TableHead className="font-modern">Referrer</TableHead>
                       </TableRow>
                     </TableHeader>
@@ -353,7 +356,16 @@ export const EventDetailsModal = ({ isOpen, onClose, eventType, eventDisplayName
                             </Badge>
                           </TableCell>
                           <TableCell className="font-modern text-sm">
-                            {formatEventData(event.event_data, eventType)}
+                            {event.event_data?.section || 'N/A'}
+                          </TableCell>
+                          <TableCell className="font-modern text-sm">
+                            {event.event_data?.item || 'N/A'}
+                          </TableCell>
+                          <TableCell className="font-modern text-sm">
+                            {event.event_data?.type || 'N/A'}
+                          </TableCell>
+                          <TableCell className="font-modern text-sm">
+                            {event.event_data?.url || event.event_data?.value || 'N/A'}
                           </TableCell>
                           <TableCell className="font-modern text-sm text-muted-foreground">
                             {event.session_data?.referrer ? (
