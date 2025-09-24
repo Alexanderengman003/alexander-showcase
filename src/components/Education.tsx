@@ -102,10 +102,11 @@ export function Education() {
                               href="https://www.kth.se/"
                               target="_blank"
                               rel="noopener noreferrer"
-                              onClick={() => track("Partner click", {
+                              onClick={() => track("Link click", {
+                                type: 'institution',
                                 section: "Education",
-                                partner: edu.school,
-                                item: edu.degree,
+                                item: edu.school,
+                                degree: edu.degree,
                                 url: "https://www.kth.se/"
                               })}
                               className="text-sm font-medium hover:text-primary transition-colors cursor-pointer inline-flex items-center gap-1"
@@ -156,10 +157,11 @@ export function Education() {
                           href="https://www.kth.se/"
                           target="_blank"
                           rel="noopener noreferrer"
-                          onClick={() => track("Partner click", {
+                          onClick={() => track("Link click", {
+                            type: 'institution',
                             section: "Education",
-                            partner: edu.school,
-                            item: edu.degree,
+                            item: edu.school,
+                            degree: edu.degree,
                             url: "https://www.kth.se/"
                           })}
                           className="text-sm font-medium hover:text-primary transition-colors cursor-pointer inline-flex items-center gap-1"

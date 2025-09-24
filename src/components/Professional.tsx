@@ -131,10 +131,10 @@ export function Professional() {
     setSelectedTechnologies(newTechnologies);
     
     // Track filter state
-    track('professional_filters_applied', {
-      area: selectedArea,
-      technologies: newTechnologies,
-      software: selectedSoftware,
+    track("Filter applied", {
+      section: "Professional Experience",
+      filter: "technology",
+      value: newTechnologies.join(", "),
       totalResults: professionalRoles.filter(role => {
         const areaMatch = selectedArea === "All" || role.area.includes(selectedArea);
         const techMatch = newTechnologies.length === 0 || 
@@ -142,10 +142,7 @@ export function Professional() {
         const softwareMatch = selectedSoftware.length === 0 || 
           selectedSoftware.every(software => role.software.includes(software));
         return areaMatch && techMatch && softwareMatch;
-      }).length,
-      source: 'professional_section',
-      timestamp: Date.now(),
-      userAgent: navigator.userAgent
+      }).length
     });
   };
 
@@ -153,20 +150,16 @@ export function Professional() {
     setSelectedTechnologies([]);
     
     // Track filter clear
-    track('professional_filters_applied', {
-      area: selectedArea,
-      technologies: [],
-      software: selectedSoftware,
+    track("Filter applied", {
+      section: "Professional Experience", 
+      filter: "technology",
+      value: "cleared",
       totalResults: professionalRoles.filter(role => {
         const areaMatch = selectedArea === "All" || role.area.includes(selectedArea);
         const softwareMatch = selectedSoftware.length === 0 || 
           selectedSoftware.every(software => role.software.includes(software));
         return areaMatch && softwareMatch;
-      }).length,
-      source: 'professional_section',
-      action: 'clear_technologies',
-      timestamp: Date.now(),
-      userAgent: navigator.userAgent
+      }).length
     });
   };
 
@@ -178,10 +171,10 @@ export function Professional() {
     setSelectedSoftware(newSoftware);
     
     // Track filter state
-    track('professional_filters_applied', {
-      area: selectedArea,
-      technologies: selectedTechnologies,
-      software: newSoftware,
+    track("Filter applied", {
+      section: "Professional Experience",
+      filter: "software", 
+      value: newSoftware.join(", "),
       totalResults: professionalRoles.filter(role => {
         const areaMatch = selectedArea === "All" || role.area.includes(selectedArea);
         const techMatch = selectedTechnologies.length === 0 || 
@@ -189,10 +182,7 @@ export function Professional() {
         const softwareMatch = newSoftware.length === 0 || 
           newSoftware.every(software => role.software.includes(software));
         return areaMatch && techMatch && softwareMatch;
-      }).length,
-      source: 'professional_section',
-      timestamp: Date.now(),
-      userAgent: navigator.userAgent
+      }).length
     });
   };
 
@@ -200,20 +190,16 @@ export function Professional() {
     setSelectedSoftware([]);
     
     // Track filter clear
-    track('professional_filters_applied', {
-      area: selectedArea,
-      technologies: selectedTechnologies,
-      software: [],
+    track("Filter applied", {
+      section: "Professional Experience",
+      filter: "software",
+      value: "cleared", 
       totalResults: professionalRoles.filter(role => {
         const areaMatch = selectedArea === "All" || role.area.includes(selectedArea);
         const techMatch = selectedTechnologies.length === 0 || 
           selectedTechnologies.every(tech => role.technologies.includes(tech));
         return areaMatch && techMatch;
-      }).length,
-      source: 'professional_section',
-      action: 'clear_software',
-      timestamp: Date.now(),
-      userAgent: navigator.userAgent
+      }).length
     });
   };
 
@@ -515,10 +501,11 @@ export function Professional() {
                               href="https://my.avnet.com/ebv/"
                               target="_blank"
                               rel="noopener noreferrer"
-                              onClick={() => track("Partner click", { 
+                              onClick={() => track("Link click", {
+                                type: 'company',
                                 section: "Professional Experience",
-                                partner: "EBV Elektronik",
-                                item: "Technical Account Manager",
+                                item: "EBV Elektronik",
+                                position: "Technical Account Manager",
                                 url: "https://my.avnet.com/ebv/"
                               })}
                               className="hover:opacity-80 transition-opacity"
@@ -535,10 +522,11 @@ export function Professional() {
                               href="https://www.ascilion.com/"
                               target="_blank"
                               rel="noopener noreferrer"
-                              onClick={() => track("Partner click", { 
+                              onClick={() => track("Link click", {
+                                type: 'company',
                                 section: "Professional Experience",
-                                partner: "Ascilion AB",
-                                item: role.title,
+                                item: "Ascilion AB",
+                                position: role.title,
                                 url: "https://www.ascilion.com/"
                               })}
                               className="hover:opacity-80 transition-opacity"
@@ -555,10 +543,11 @@ export function Professional() {
                               href="https://www.brightdaygraphene.se/"
                               target="_blank"
                               rel="noopener noreferrer"
-                              onClick={() => track("Partner click", { 
+                              onClick={() => track("Link click", {
+                                type: 'company',
                                 section: "Professional Experience",
-                                partner: "Bright Day Graphene AB",
-                                item: "Process Engineer",
+                                item: "Bright Day Graphene AB",
+                                position: "Process Engineer",
                                 url: "https://www.brightdaygraphene.se/"
                               })}
                               className="hover:opacity-80 transition-opacity"
@@ -575,10 +564,11 @@ export function Professional() {
                               href="https://www.exeger.com/"
                               target="_blank"
                               rel="noopener noreferrer"
-                              onClick={() => track("Partner click", { 
+                              onClick={() => track("Link click", {
+                                type: 'company',
                                 section: "Professional Experience",
-                                partner: "Exeger Operations AB",
-                                item: "Application Engineer",
+                                item: "Exeger Operations AB",
+                                position: "Application Engineer",
                                 url: "https://www.exeger.com/"
                               })}
                               className="hover:opacity-80 transition-opacity"
@@ -605,10 +595,11 @@ export function Professional() {
                             }
                             target="_blank"
                             rel="noopener noreferrer"
-                            onClick={() => track("Partner click", { 
+                            onClick={() => track("Link click", {
+                              type: 'company',
                               section: "Professional Experience",
-                              partner: role.company,
-                              item: role.title,
+                              item: role.company,
+                              position: role.title,
                               url: role.company === "EBV Elektronik" ? "https://my.avnet.com/ebv/" :
                                    role.company === "Ascilion AB" ? "https://www.ascilion.com/" :
                                    role.company === "Bright Day Graphene AB" ? "https://www.brightdaygraphene.se/" :
@@ -695,10 +686,11 @@ export function Professional() {
                             href="https://my.avnet.com/ebv/"
                             target="_blank"
                             rel="noopener noreferrer"
-                            onClick={() => track("Partner click", { 
+                            onClick={() => track("Link click", {
+                              type: 'company',
                               section: "Professional Experience",
-                              partner: "EBV Elektronik",
-                              item: role.title,
+                              item: "EBV Elektronik",
+                              position: role.title,
                               url: "https://my.avnet.com/ebv/"
                             })}
                             className="hover:opacity-80 transition-opacity"
@@ -715,10 +707,11 @@ export function Professional() {
                             href="https://www.ascilion.com/"
                             target="_blank"
                             rel="noopener noreferrer"
-                            onClick={() => track("Partner click", { 
+                            onClick={() => track("Link click", {
+                              type: 'company',
                               section: "Professional Experience",
-                              partner: "Ascilion AB",
-                              item: role.title,
+                              item: "Ascilion AB",
+                              position: role.title,
                               url: "https://www.ascilion.com/"
                             })}
                             className="hover:opacity-80 transition-opacity"
@@ -735,10 +728,11 @@ export function Professional() {
                             href="https://www.brightdaygraphene.se/"
                             target="_blank"
                             rel="noopener noreferrer"
-                            onClick={() => track("Partner click", { 
+                            onClick={() => track("Link click", {
+                              type: 'company',
                               section: "Professional Experience",
-                              partner: "Bright Day Graphene AB",
-                              item: role.title,
+                              item: "Bright Day Graphene AB",
+                              position: role.title,
                               url: "https://www.brightdaygraphene.se/"
                             })}
                             className="hover:opacity-80 transition-opacity"
@@ -755,10 +749,11 @@ export function Professional() {
                             href="https://www.exeger.com/"
                             target="_blank"
                             rel="noopener noreferrer"
-                            onClick={() => track("Partner click", { 
+                            onClick={() => track("Link click", {
+                              type: 'company',
                               section: "Professional Experience",
-                              partner: "Exeger Operations AB",
-                              item: role.title,
+                              item: "Exeger Operations AB",
+                              position: role.title,
                               url: "https://www.exeger.com/"
                             })}
                             className="hover:opacity-80 transition-opacity"
@@ -783,10 +778,11 @@ export function Professional() {
                           }
                           target="_blank"
                           rel="noopener noreferrer"
-                          onClick={() => track("Partner click", { 
+                          onClick={() => track("Link click", {
+                            type: 'company',
                             section: "Professional Experience",
-                            partner: role.company,
-                            item: role.title,
+                            item: role.company,
+                            position: role.title,
                             url: role.company === "EBV Elektronik" ? "https://my.avnet.com/ebv/" :
                                  role.company === "Ascilion AB" ? "https://www.ascilion.com/" :
                                  role.company === "Bright Day Graphene AB" ? "https://www.brightdaygraphene.se/" :

@@ -29,7 +29,13 @@ const Index = () => {
         // Track desktop analytics access
         import('@/hooks/useTrackEvent').then(({ useTrackEvent }) => {
           const { track } = useTrackEvent();
-          track('analytics_access_desktop', { method: 'keyboard_shortcut', source: 'ctrl_shift_a' });
+          track('Link click', {
+            type: 'analytics',
+            section: 'Analytics Access',
+            item: 'Analytics dashboard',
+            method: 'keyboard_shortcut',
+            source: 'ctrl_shift_a'
+          });
         });
         
         setShowAnalytics(true);
@@ -55,7 +61,13 @@ const Index = () => {
           // Track mobile analytics access
           import('@/hooks/useTrackEvent').then(({ useTrackEvent }) => {
             const { track } = useTrackEvent();
-            track('analytics_access_mobile', { method: 'tap_sequence', source: 'footer' });
+            track('Link click', {
+              type: 'analytics',
+              section: 'Analytics Access',
+              item: 'Analytics dashboard',
+              method: 'tap_sequence',
+              source: 'footer'
+            });
           });
           
           setShowAnalytics(true);

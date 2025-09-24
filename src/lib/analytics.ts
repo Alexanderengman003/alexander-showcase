@@ -378,8 +378,8 @@ export const getAnalyticsStats = async (days: number = 7) => {
         // Create better display names for events
         let displayAction = event.event_type;
         
-        if (event.event_type === 'Partner click') {
-          displayAction = 'Partner click';
+        if (event.event_type === 'Link click') {
+          displayAction = 'Link click';
         } else if (event.event_type === 'Filter applied') {
           displayAction = 'Filter applied';
         } else {

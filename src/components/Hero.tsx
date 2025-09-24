@@ -68,7 +68,12 @@ export function Hero() {
                 variant="blue-dark"
                 className="hover-lift font-modern group"
                 onClick={() => {
-                  track('linkedin_click', { source: 'hero' });
+                  track('Link click', { 
+                    type: 'social_media',
+                    section: 'Hero', 
+                    item: 'LinkedIn profile',
+                    url: 'https://www.linkedin.com/in/alexanderengman'
+                  });
                   window.open('https://www.linkedin.com/in/alexanderengman', '_blank');
                 }}
               >
@@ -79,7 +84,12 @@ export function Hero() {
                 variant="blue-medium" 
                 className="hover-lift font-modern group"
                 onClick={() => {
-                  track('contact_button_click', { source: 'hero' });
+                  track('Link click', { 
+                    type: 'email',
+                    section: 'Hero', 
+                    item: 'Contact email',
+                    url: 'mailto:alexander@engman.nu'
+                  });
                   window.location.href = 'mailto:alexander@engman.nu?subject=Contact from website&body=Hello Alexander,';
                 }}
               >
@@ -91,7 +101,12 @@ export function Hero() {
                 size="lg" 
                 className="hover-lift font-modern group"
                 onClick={() => {
-                  track('cv_download_click', { source: 'hero' });
+                  track('Link click', { 
+                    type: 'download',
+                    section: 'Hero', 
+                    item: 'CV Download',
+                    url: '/CV_Alexander_Engman_2025.pdf'
+                  });
                   const link = document.createElement('a');
                   link.href = '/CV_Alexander_Engman_2025.pdf';
                   link.download = 'CV_Alexander_Engman_2025.pdf';

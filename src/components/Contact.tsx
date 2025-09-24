@@ -157,9 +157,19 @@ export function Contact() {
                       className="text-foreground hover:text-primary transition-colors"
                       onClick={() => {
                         if (item.label === "Email") {
-                          track('contact_info_click', { type: 'email', source: 'contact_section' });
+                          track('Link click', { 
+                            type: 'email', 
+                            section: 'Contact', 
+                            item: 'Email address',
+                            url: `mailto:${item.href.replace('mailto:', '')}`
+                          });
                         } else if (item.label === "Phone") {
-                          track('contact_info_click', { type: 'phone', source: 'contact_section' });
+                          track('Link click', { 
+                            type: 'phone', 
+                            section: 'Contact', 
+                            item: 'Phone number',
+                            url: `tel:${item.href.replace('tel:', '')}`
+                          });
                         }
                       }}
                     >

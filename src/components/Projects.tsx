@@ -187,10 +187,11 @@ export function Projects() {
                              href={project.institution === "Ascilion AB" ? "https://www.ascilion.com/" : "https://www.kth.se/"}
                              target="_blank"
                              rel="noopener noreferrer"
-                              onClick={() => track("Partner click", {
+                              onClick={() => track("Link click", {
+                                type: 'institution',
                                 section: "Projects & Research",
-                                partner: project.institution,
-                                item: project.title,
+                                item: project.institution,
+                                project: project.title,
                                 category: project.category,
                                 url: project.institution === "Ascilion AB" ? "https://www.ascilion.com/" : "https://www.kth.se/"
                               })}
@@ -243,10 +244,11 @@ export function Projects() {
                              href={project.institution === "Ascilion AB" ? "https://www.ascilion.com/" : "https://www.kth.se/"}
                              target="_blank"
                              rel="noopener noreferrer"
-                              onClick={() => track("Partner click", {
+                              onClick={() => track("Link click", {
+                                type: 'institution',
                                 section: "Projects & Research",
-                                partner: project.institution,
-                                item: project.title,
+                                item: project.institution,
+                                project: project.title,
                                 category: project.category,
                                 url: project.institution === "Ascilion AB" ? "https://www.ascilion.com/" : "https://www.kth.se/"
                               })}
