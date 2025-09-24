@@ -3,7 +3,6 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Loader2, Globe, Clock, Monitor, Smartphone, X, RefreshCw, Link, Home, ExternalLink } from "lucide-react";
 import { getReferrerStats } from "@/lib/analytics";
 
@@ -79,13 +78,26 @@ export const ReferrerDetailsModal = ({ isOpen, onClose, timeRange }: ReferrerDet
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-6xl max-h-[80vh] overflow-hidden flex flex-col">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 font-modern">
-            <Globe className="h-5 w-5 text-primary" />
-            Traffic Sources Details
-          </DialogTitle>
-          <DialogDescription className="font-modern">
-            How users found your site - based on first visit per session only
-          </DialogDescription>
+          <div className="flex items-center justify-between">
+            <div>
+              <DialogTitle className="flex items-center gap-2 font-modern">
+                <Globe className="h-5 w-5 text-primary" />
+                Traffic Sources Details
+              </DialogTitle>
+              <DialogDescription className="font-modern">
+                How users found your site - based on first visit per session only
+              </DialogDescription>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={fetchReferrerData}
+              className="font-modern"
+            >
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Refresh
+            </Button>
+          </div>
         </DialogHeader>
 
         {loading ? (
@@ -97,23 +109,6 @@ export const ReferrerDetailsModal = ({ isOpen, onClose, timeRange }: ReferrerDet
           </div>
         ) : referrerData ? (
           <div className="flex flex-col gap-6 overflow-hidden">
-            {/* Header with Refresh Button */}
-            <div className="flex justify-between items-center mb-4">
-              <div>
-                <h3 className="text-lg font-semibold font-modern">Traffic Sources Overview</h3>
-                <p className="text-sm text-muted-foreground font-modern">How users found your site</p>
-              </div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={fetchReferrerData}
-                className="font-modern"
-              >
-                <RefreshCw className="h-4 w-4 mr-2" />
-                Refresh
-              </Button>
-            </div>
-
             {/* Summary Cards */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <Card>
@@ -242,100 +237,6 @@ export const ReferrerDetailsModal = ({ isOpen, onClose, timeRange }: ReferrerDet
                 </CardContent>
               </Card>
             </div>
-
-            {/* Detailed User Sessions Table */}
-            <Card className="flex-1 overflow-hidden">
-              <CardHeader className="flex flex-row items-center justify-between">
-                <div>
-                  <CardTitle className="font-modern">User Session Details</CardTitle>
-                  <CardDescription className="font-modern">
-                    How users found your site with session information
-                  </CardDescription>
-                </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={fetchReferrerData}
-                  className="font-modern"
-                >
-                  <RefreshCw className="h-4 w-4 mr-2" />
-                  Refresh
-                </Button>
-              </CardHeader>
-              <CardContent className="overflow-auto max-h-[300px]">
-                {referrerData.sessionsData.length > 0 ? (
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead className="font-modern w-32">First Visit</TableHead>
-                        <TableHead className="font-modern w-32">Referrer Source</TableHead>
-                        <TableHead className="font-modern w-24">Location</TableHead>
-                        <TableHead className="font-modern w-20">Device</TableHead>
-                        <TableHead className="font-modern w-20">Browser</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {referrerData.sessionsData.map((session: any) => (
-                        <TableRow key={session.session_id}>
-                          <TableCell className="font-medium font-modern text-xs">
-                            <div className="flex items-center gap-1">
-                              <Clock className="h-3 w-3 text-muted-foreground" />
-                              <span>{formatDate(session.first_visit_at)}</span>
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex items-center gap-2">
-                              {getReferrerIcon(session.referrer_display)}
-                              <span className="font-modern text-sm">
-                                {session.referrer ? (
-                                  <a
-                                    href={session.referrer}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="hover:text-primary underline-offset-4 hover:underline"
-                                  >
-                                    {session.referrer_display}
-                                  </a>
-                                ) : (
-                                  'Direct'
-                                )}
-                              </span>
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex items-center gap-2">
-                              <Globe className="h-4 w-4 text-muted-foreground" />
-                              <span className="font-modern text-sm">
-                                {session.country || 'Unknown'}
-                              </span>
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex items-center gap-2">
-                              {getDeviceIcon(session.device_type || '')}
-                              <span className="font-modern text-sm capitalize">
-                                {session.device_type || 'Unknown'}
-                              </span>
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <Badge variant="secondary" className="font-modern text-xs">
-                              {session.browser || 'Unknown'}
-                            </Badge>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                ) : (
-                  <div className="text-center py-8 text-muted-foreground">
-                    <Globe className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                    <p className="font-modern">No session data available</p>
-                    <p className="text-xs mt-1 font-modern">Session data will appear here when users visit your site</p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
           </div>
         ) : (
           <div className="text-center py-12 text-muted-foreground">
