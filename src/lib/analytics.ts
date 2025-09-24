@@ -340,6 +340,16 @@ export const getAnalyticsStats = async (days: number = 7) => {
         time: getTimeAgo(new Date(view.created_at)),
         location: view.city && view.country ? `${view.city}, ${view.country}` : view.country || 'Unknown',
         type: 'page_view',
+        data: {
+          referrer: view.referrer,
+          userAgent: view.user_agent,
+          device: view.device_type,
+          browser: view.browser,
+          operatingSystem: view.operating_system,
+          ipAddress: view.ip_address,
+          sessionId: view.session_id,
+          pageTitle: view.page_title
+        },
         timestamp: view.created_at
       })) || [];
 
@@ -349,9 +359,14 @@ export const getAnalyticsStats = async (days: number = 7) => {
         action: event.event_type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
         page: event.page_path || 'Unknown',
         time: getTimeAgo(new Date(event.created_at)),
-        location: 'Event', // Events don't have location data
+        location: 'User Interaction',
         type: 'event',
-        data: event.event_data,
+        data: {
+          ...(event.event_data && typeof event.event_data === 'object' ? event.event_data : {}),
+          sessionId: event.session_id,
+          eventType: event.event_type,
+          eventId: event.id
+        },
         timestamp: event.created_at
       })) || [];
 

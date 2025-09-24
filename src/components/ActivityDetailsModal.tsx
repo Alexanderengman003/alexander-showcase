@@ -118,10 +118,16 @@ const ActivityDetailsModal: React.FC<ActivityDetailsModalProps> = ({
                 <CardTitle className="font-modern text-lg">Additional Information</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                {activity.data.source && (
-                  <div className="flex items-center justify-between">
+                {activity.data.referrer && (
+                  <div className="flex items-start justify-between">
                     <span className="text-sm text-muted-foreground">Referrer:</span>
-                    <span className="font-medium">{activity.data.source}</span>
+                    <span className="font-medium text-right max-w-md break-all">{activity.data.referrer}</span>
+                  </div>
+                )}
+                {activity.data.pageTitle && (
+                  <div className="flex items-start justify-between">
+                    <span className="text-sm text-muted-foreground">Page Title:</span>
+                    <span className="font-medium text-right max-w-md">{activity.data.pageTitle}</span>
                   </div>
                 )}
                 {activity.data.device && (
@@ -129,7 +135,7 @@ const ActivityDetailsModal: React.FC<ActivityDetailsModalProps> = ({
                     <span className="text-sm text-muted-foreground">Device:</span>
                     <div className="flex items-center gap-2">
                       {getDeviceIcon(activity.data.device)}
-                      <span className="font-medium">{activity.data.device}</span>
+                      <span className="font-medium capitalize">{activity.data.device}</span>
                     </div>
                   </div>
                 )}
@@ -139,10 +145,64 @@ const ActivityDetailsModal: React.FC<ActivityDetailsModalProps> = ({
                     <span className="font-medium">{activity.data.browser}</span>
                   </div>
                 )}
+                {activity.data.operatingSystem && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground">OS:</span>
+                    <span className="font-medium">{activity.data.operatingSystem}</span>
+                  </div>
+                )}
                 {activity.data.userAgent && (
                   <div className="flex items-start justify-between">
                     <span className="text-sm text-muted-foreground">User Agent:</span>
                     <span className="font-medium text-xs max-w-md text-right break-all">{activity.data.userAgent}</span>
+                  </div>
+                )}
+                {activity.data.sessionId && (
+                  <div className="flex items-start justify-between">
+                    <span className="text-sm text-muted-foreground">Session ID:</span>
+                    <span className="font-mono text-xs max-w-md text-right break-all">{activity.data.sessionId}</span>
+                  </div>
+                )}
+                {activity.data.ipAddress && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground">IP Address:</span>
+                    <span className="font-mono text-sm">{activity.data.ipAddress}</span>
+                  </div>
+                )}
+                {activity.data.source && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground">Source:</span>
+                    <span className="font-medium">{activity.data.source}</span>
+                  </div>
+                )}
+                {activity.data.eventType && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground">Event Type:</span>
+                    <span className="font-medium">{activity.data.eventType}</span>
+                  </div>
+                )}
+                {activity.data.category && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground">Category:</span>
+                    <span className="font-medium">{activity.data.category}</span>
+                  </div>
+                )}
+                {activity.data.previousMode && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground">Previous Mode:</span>
+                    <span className="font-medium">{activity.data.previousMode}</span>
+                  </div>
+                )}
+                {activity.data.viewMode && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground">View Mode:</span>
+                    <span className="font-medium">{activity.data.viewMode}</span>
+                  </div>
+                )}
+                {activity.data.institution && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground">Institution:</span>
+                    <span className="font-medium">{activity.data.institution}</span>
                   </div>
                 )}
                 {activity.data.sessionDuration && (
@@ -153,7 +213,7 @@ const ActivityDetailsModal: React.FC<ActivityDetailsModalProps> = ({
                 )}
                 {activity.data.timestamp && (
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Timestamp:</span>
+                    <span className="text-sm text-muted-foreground">Event Timestamp:</span>
                     <span className="font-medium text-xs">{new Date(activity.data.timestamp).toLocaleString()}</span>
                   </div>
                 )}
