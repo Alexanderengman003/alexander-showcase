@@ -309,29 +309,33 @@ const Analytics = () => {
                         <div className="text-xs text-muted-foreground">{event.percentage}%</div>
                      </div>
                    ))
-                 ) : (
-                    <div className="col-span-full text-center py-8 text-muted-foreground">
-                      <MousePointer className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                      <p>No user interactions yet</p>
-                      <p className="text-xs mt-1">Button clicks and interactions will appear here</p>
-                    </div>
-                  )}
-                  {/* Traffic Sources Card */}
-                  {referrerStats && referrerStats.totalSessions > 0 && (
-                    <div 
-                      className="text-center p-4 rounded-lg bg-card border border-border/50 transition-all duration-200 hover:border-primary hover:shadow-md hover:scale-105 cursor-pointer"
-                      onClick={handleReferrerClick}
-                      title="Click to view detailed traffic sources information"
-                    >
-                      <div className="font-semibold font-modern text-lg text-primary mb-1">
-                        {referrerStats.totalSessions}
-                      </div>
-                      <div className="text-xs font-medium text-foreground mt-1">Traffic Sources</div>
-                      <div className="text-xs text-muted-foreground mt-1">
-                        {referrerStats.directPercentage}% Direct • {referrerStats.linkedinPercentage}% LinkedIn
-                      </div>
-                    </div>
-                  )}
+                 ) : null}
+                 
+                 {/* Traffic Sources Card */}
+                 {referrerStats && referrerStats.totalSessions > 0 && (
+                   <div 
+                     className="text-center p-4 rounded-lg bg-card border border-border/50 transition-all duration-200 hover:border-primary hover:shadow-md hover:scale-105 cursor-pointer"
+                     onClick={handleReferrerClick}
+                     title="Click to view detailed traffic sources information"
+                   >
+                     <div className="font-semibold font-modern text-lg text-primary mb-1">
+                       {referrerStats.totalSessions}
+                     </div>
+                     <div className="text-xs font-medium text-foreground mt-1">Traffic Sources</div>
+                     <div className="text-xs text-muted-foreground mt-1">
+                       {referrerStats.directPercentage}% Direct • {referrerStats.linkedinPercentage}% LinkedIn
+                     </div>
+                   </div>
+                 )}
+
+                 {/* Show "No user interactions yet" only if there are no events AND no traffic sources */}
+                 {(!stats.topEvents || stats.topEvents.length === 0) && (!referrerStats || referrerStats.totalSessions === 0) && (
+                   <div className="col-span-full text-center py-8 text-muted-foreground">
+                     <MousePointer className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                     <p>No user interactions yet</p>
+                     <p className="text-xs mt-1">Button clicks and interactions will appear here</p>
+                   </div>
+                 )}
                </div>
             </CardContent>
           </Card>
