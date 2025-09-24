@@ -167,10 +167,26 @@ export const trackPageView = async (pagePath: string, pageTitle: string) => {
   }
 };
 
-// Track custom events (like contact form submission, CV download)
 export const trackEvent = async (eventType: string, eventData?: any, pagePath?: string) => {
   try {
     const sessionId = getSessionId();
+    
+    // Get current page path more accurately
+    const currentPage = pagePath || (() => {
+      const hash = window.location.hash;
+      const pathname = window.location.pathname;
+      
+      if (hash && hash.startsWith('#')) {
+        // If we have a hash, use that as the page
+        return hash;
+      } else if (pathname === '/' || pathname === '') {
+        // If we're on the home page, return home
+        return '/';
+      } else {
+        // Otherwise use the pathname
+        return pathname;
+      }
+    })();
     
     await supabase
       .from('analytics_events')
@@ -178,7 +194,7 @@ export const trackEvent = async (eventType: string, eventData?: any, pagePath?: 
         event_type: eventType,
         event_data: eventData || null,
         session_id: sessionId,
-        page_path: pagePath || window.location.pathname,
+        page_path: currentPage,
       });
 
   } catch (error) {
@@ -279,30 +295,13 @@ export const getAnalyticsStats = async (days: number = 7) => {
       }))
       .sort((a, b) => b.count - a.count);
 
-    // Professional filter tracking stats  
-    const filterEvents = events?.filter(event => event.event_type === 'professional_filters_applied') || [];
+    // Filter tracking stats for all sections
+    const filterEvents = events?.filter(event => event.event_type === 'Filter applied') || [];
     const filterStats = filterEvents.reduce((acc: any, event) => {
       const eventData = event.event_data as any;
-      if (eventData) {
-        // Track area filters
-        if (eventData.area && eventData.area !== 'All') {
-          const key = `Area: ${eventData.area}`;
-          acc[key] = (acc[key] || 0) + 1;
-        }
-        // Track technology filters
-        if (eventData.technologies && eventData.technologies.length > 0) {
-          eventData.technologies.forEach((tech: string) => {
-            const key = `Skill: ${tech}`;
-            acc[key] = (acc[key] || 0) + 1;
-          });
-        }
-        // Track software filters
-        if (eventData.software && eventData.software.length > 0) {
-          eventData.software.forEach((software: string) => {
-            const key = `Software: ${software}`;
-            acc[key] = (acc[key] || 0) + 1;
-          });
-        }
+      if (eventData && eventData.section && eventData.filter && eventData.value) {
+        const key = `${eventData.section}: ${eventData.filter} = ${eventData.value}`;
+        acc[key] = (acc[key] || 0) + 1;
       }
       return acc;
     }, {});
@@ -375,20 +374,34 @@ export const getAnalyticsStats = async (days: number = 7) => {
 
     const recentEvents = allEvents
       ?.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()) // Sort by newest first
-      .map(event => ({
-        action: event.event_type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
-        page: event.page_path || 'Unknown',
-        time: getTimeAgo(new Date(event.created_at)),
-        location: 'User Interaction',
-        type: 'event',
-        data: {
-          ...(event.event_data && typeof event.event_data === 'object' ? event.event_data : {}),
-          sessionId: event.session_id,
-          eventType: event.event_type,
-          eventId: event.id
-        },
-        timestamp: event.created_at
-      })) || [];
+      .map(event => {
+        // Create better display names for events
+        let displayAction = event.event_type;
+        
+        if (event.event_type === 'Partner click') {
+          displayAction = 'Partner click';
+        } else if (event.event_type === 'Filter applied') {
+          displayAction = 'Filter applied';
+        } else {
+          // For other events, convert snake_case to Title Case
+          displayAction = event.event_type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        }
+        
+        return {
+          action: displayAction,
+          page: event.page_path || 'Unknown',
+          time: getTimeAgo(new Date(event.created_at)),
+          location: 'User Interaction',
+          type: 'event',
+          data: {
+            ...(event.event_data && typeof event.event_data === 'object' ? event.event_data : {}),
+            sessionId: event.session_id,
+            eventType: event.event_type,
+            eventId: event.id
+          },
+          timestamp: event.created_at
+        };
+      }) || [];
 
     // Combine activity without limiting - show ALL data
     const combinedActivity = [...recentPageViews, ...recentEvents]

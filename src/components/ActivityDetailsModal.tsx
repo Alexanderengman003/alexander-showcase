@@ -213,10 +213,6 @@ const ActivityDetailsModal: React.FC<ActivityDetailsModalProps> = ({
             </Card>
           )}
 
-          {/* Usage Note */}
-          <div className="text-center text-sm text-muted-foreground bg-muted/30 p-4 rounded-lg">
-            This represents a single {activity.type === 'event' ? 'user interaction' : 'page view'} from your website visitors.
-          </div>
         </div>
       </DialogContent>
     </Dialog>

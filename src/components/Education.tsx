@@ -45,12 +45,10 @@ export function Education() {
             <div className="inline-flex rounded-lg bg-muted p-1">
               <button
                 onClick={() => {
-                  track('education_view_toggle', { 
-                    viewMode: 'card', 
-                    previousMode: viewMode,
-                    source: 'education_section',
-                    timestamp: Date.now(),
-                    sessionDuration: performance.now()
+                  track("Filter applied", { 
+                    section: "Education",
+                    filter: "view_mode",
+                    value: "card"
                   });
                   setViewMode('card');
                 }}
@@ -64,12 +62,10 @@ export function Education() {
               </button>
               <button
                 onClick={() => {
-                  track('education_view_toggle', { 
-                    viewMode: 'list', 
-                    previousMode: viewMode,
-                    source: 'education_section',
-                    timestamp: Date.now(),
-                    sessionDuration: performance.now()
+                  track("Filter applied", { 
+                    section: "Education",
+                    filter: "view_mode",
+                    value: "list"
                   });
                   setViewMode('list');
                 }}
@@ -106,12 +102,11 @@ export function Education() {
                               href="https://www.kth.se/"
                               target="_blank"
                               rel="noopener noreferrer"
-                              onClick={() => track('education_click', { 
-                                clickType: 'institution_link',
-                                institution: edu.school,
-                                degree: edu.degree,
-                                source: 'education_section',
-                                timestamp: Date.now()
+                              onClick={() => track("Partner click", {
+                                section: "Education",
+                                partner: edu.school,
+                                item: edu.degree,
+                                url: "https://www.kth.se/"
                               })}
                               className="text-sm font-medium hover:text-primary transition-colors cursor-pointer inline-flex items-center gap-1"
                             >
@@ -161,12 +156,11 @@ export function Education() {
                           href="https://www.kth.se/"
                           target="_blank"
                           rel="noopener noreferrer"
-                          onClick={() => track('education_click', { 
-                            clickType: 'institution_link',
-                            institution: edu.school,
-                            degree: edu.degree,
-                            source: 'education_section',
-                            timestamp: Date.now()
+                          onClick={() => track("Partner click", {
+                            section: "Education",
+                            partner: edu.school,
+                            item: edu.degree,
+                            url: "https://www.kth.se/"
                           })}
                           className="text-sm font-medium hover:text-primary transition-colors cursor-pointer inline-flex items-center gap-1"
                         >

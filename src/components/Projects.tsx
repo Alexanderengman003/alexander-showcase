@@ -97,11 +97,10 @@ export function Projects() {
                 <button
                   key={category}
                   onClick={() => {
-                    track('project_filter_click', { 
-                      category, 
-                      source: 'projects_section',
-                      timestamp: Date.now(),
-                      userAgent: navigator.userAgent 
+                    track("Filter applied", { 
+                      section: "Projects & Research",
+                      filter: "category",
+                      value: category
                     });
                     setSelectedCategory(category);
                   }}
@@ -119,12 +118,10 @@ export function Projects() {
             <div className="inline-flex rounded-lg bg-muted p-1">
               <button
                 onClick={() => {
-                  track('project_view_toggle', { 
-                    viewMode: 'card', 
-                    previousMode: viewMode,
-                    source: 'projects_section',
-                    timestamp: Date.now(),
-                    sessionDuration: performance.now()
+                  track("Filter applied", { 
+                    section: "Projects & Research",
+                    filter: "view_mode",
+                    value: "card"
                   });
                   setViewMode('card');
                 }}
@@ -138,12 +135,10 @@ export function Projects() {
               </button>
               <button
                 onClick={() => {
-                  track('project_view_toggle', { 
-                    viewMode: 'list', 
-                    previousMode: viewMode,
-                    source: 'projects_section',
-                    timestamp: Date.now(),
-                    sessionDuration: performance.now()
+                  track("Filter applied", { 
+                    section: "Projects & Research",
+                    filter: "view_mode",
+                    value: "list"
                   });
                   setViewMode('list');
                 }}
@@ -192,14 +187,13 @@ export function Projects() {
                              href={project.institution === "Ascilion AB" ? "https://www.ascilion.com/" : "https://www.kth.se/"}
                              target="_blank"
                              rel="noopener noreferrer"
-                             onClick={() => track('project_click', { 
-                               clickType: 'institution_link',
-                               projectTitle: project.title,
-                               institution: project.institution,
-                               category: project.category,
-                               source: 'projects_section',
-                               timestamp: Date.now()
-                             })}
+                              onClick={() => track("Partner click", {
+                                section: "Projects & Research",
+                                partner: project.institution,
+                                item: project.title,
+                                category: project.category,
+                                url: project.institution === "Ascilion AB" ? "https://www.ascilion.com/" : "https://www.kth.se/"
+                              })}
                              className="text-sm font-medium hover:text-primary transition-colors cursor-pointer inline-flex items-center gap-1"
                            >
                              {project.institution}
@@ -249,14 +243,13 @@ export function Projects() {
                              href={project.institution === "Ascilion AB" ? "https://www.ascilion.com/" : "https://www.kth.se/"}
                              target="_blank"
                              rel="noopener noreferrer"
-                             onClick={() => track('project_click', { 
-                               clickType: 'institution_link',
-                               projectTitle: project.title,
-                               institution: project.institution,
-                               category: project.category,
-                               source: 'projects_section',
-                               timestamp: Date.now()
-                             })}
+                              onClick={() => track("Partner click", {
+                                section: "Projects & Research",
+                                partner: project.institution,
+                                item: project.title,
+                                category: project.category,
+                                url: project.institution === "Ascilion AB" ? "https://www.ascilion.com/" : "https://www.kth.se/"
+                              })}
                              className="text-sm font-medium hover:text-primary transition-colors cursor-pointer inline-flex items-center gap-1"
                            >
                             <Building className="h-3 w-3" />
