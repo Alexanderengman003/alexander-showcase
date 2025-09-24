@@ -457,30 +457,44 @@ const Analytics = () => {
                   <div className="h-[200px] overflow-y-auto pr-4">
                     <div className="space-y-3">
                       {stats.recentActivity.map((activity: any, index: number) => (
-                        <div key={index} className="flex items-start space-x-3 p-2 rounded-lg hover:bg-muted/50 transition-colors pr-2">
-                          <div className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 ${
-                            activity.type === 'event' ? 'bg-green-500' : 'bg-primary'
-                          }`} />
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center space-x-2">
-                              <Badge 
-                                variant={activity.type === 'event' ? 'default' : 'secondary'} 
-                                className="text-xs font-modern"
-                              >
-                                {activity.action}
-                              </Badge>
-                              <span className="text-sm font-medium font-modern truncate">{activity.page}</span>
-                            </div>
-                            <div className="text-xs text-muted-foreground mt-1">
-                              {activity.type === 'event' ? 'User Interaction' : activity.location} • {activity.time}
-                            </div>
-                            {activity.data && (
-                              <div className="text-xs text-muted-foreground mt-1 opacity-75">
-                                {activity.data.source && `Source: ${activity.data.source}`}
+                        <Card 
+                          key={index} 
+                          className={`p-3 transition-all duration-200 hover:shadow-md hover:scale-[1.02] ${
+                            activity.type === 'event' 
+                              ? 'cursor-pointer hover:border-primary bg-card border border-border/50' 
+                              : 'bg-muted/30 border border-border/30'
+                          }`}
+                          onClick={activity.type === 'event' ? () => handleEventClick(activity.action) : undefined}
+                          title={activity.type === 'event' ? `Click to view detailed ${activity.action.toLowerCase()} information` : undefined}
+                        >
+                          <div className="flex items-start space-x-3">
+                            <div className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 ${
+                              activity.type === 'event' ? 'bg-green-500' : 'bg-primary'
+                            }`} />
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center space-x-2">
+                                <Badge 
+                                  variant={activity.type === 'event' ? 'default' : 'secondary'} 
+                                  className="text-xs font-modern"
+                                >
+                                  {activity.action}
+                                </Badge>
+                                <span className="text-sm font-medium font-modern truncate">{activity.page}</span>
                               </div>
-                            )}
+                              <div className="text-xs text-muted-foreground mt-1">
+                                {activity.type === 'event' ? 'User Interaction' : activity.location} • {activity.time}
+                              </div>
+                              {activity.data && (
+                                <div className="text-xs text-muted-foreground mt-1 opacity-75">
+                                  {activity.data.source && `Source: ${activity.data.source}`}
+                                </div>
+                              )}
+                              {activity.type === 'event' && (
+                                <div className="text-xs text-primary mt-1 font-medium">Click for details →</div>
+                              )}
+                            </div>
                           </div>
-                        </div>
+                        </Card>
                       ))}
                     </div>
                   </div>
