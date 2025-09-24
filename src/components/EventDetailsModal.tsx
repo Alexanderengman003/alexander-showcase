@@ -314,7 +314,6 @@ export const EventDetailsModal = ({ isOpen, onClose, eventType, eventDisplayName
                         <TableHead className="font-modern w-20">Browser</TableHead>
                         <TableHead className="font-modern w-24">Section</TableHead>
                         <TableHead className="font-modern w-32">Item</TableHead>
-                        <TableHead className="font-modern w-24">Referrer</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -354,20 +353,6 @@ export const EventDetailsModal = ({ isOpen, onClose, eventType, eventDisplayName
                           </TableCell>
                           <TableCell className="font-modern text-sm">
                             {event.event_data?.item || 'N/A'}
-                          </TableCell>
-                          <TableCell className="font-modern text-sm text-muted-foreground">
-                            {event.session_data?.referrer ? (
-                              <a
-                                href={event.session_data.referrer}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="hover:text-primary underline-offset-4 hover:underline"
-                              >
-                                {new URL(event.session_data.referrer).hostname}
-                              </a>
-                            ) : (
-                              'Direct'
-                            )}
                           </TableCell>
                         </TableRow>
                       ))}

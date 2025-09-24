@@ -251,6 +251,115 @@ export const trackEvent = async (eventType: string, eventData?: any, pagePath?: 
 };
 
 // Analytics data fetching functions
+// Get referrer statistics (first visit per session only)
+export const getReferrerStats = async (days: number = 7) => {
+  try {
+    // First get all sessions
+    let sessionsQuery = supabase
+      .from('analytics_sessions')
+      .select('session_id, first_visit_at, referrer, device_type, browser, country')
+      .order('first_visit_at', { ascending: false });
+
+    if (days > 0) {
+      const startDate = new Date();
+      startDate.setDate(startDate.getDate() - days);
+      sessionsQuery = sessionsQuery.gte('first_visit_at', startDate.toISOString());
+    }
+
+    const { data: sessions, error: sessionsError } = await sessionsQuery;
+    if (sessionsError) throw sessionsError;
+
+    if (!sessions || sessions.length === 0) {
+      return {
+        totalSessions: 0,
+        directPercentage: 0,
+        linkedinPercentage: 0,
+        otherPercentage: 0,
+        detailedStats: [],
+        sessionsData: []
+      };
+    }
+
+    // Categorize referrers
+    const referrerCounts = {
+      direct: 0,
+      linkedin: 0,
+      other: 0
+    };
+
+    const sessionsData = sessions.map(session => {
+      let category = 'direct';
+      
+      if (session.referrer) {
+        if (session.referrer.includes('linkedin.com')) {
+          category = 'linkedin';
+          referrerCounts.linkedin++;
+        } else {
+          category = 'other';
+          referrerCounts.other++;
+        }
+      } else {
+        referrerCounts.direct++;
+      }
+
+      return {
+        ...session,
+        category,
+        referrer_display: session.referrer ? new URL(session.referrer).hostname : 'Direct'
+      };
+    });
+
+    const totalSessions = sessions.length;
+    
+    // Calculate percentages
+    const directPercentage = Math.round((referrerCounts.direct / totalSessions) * 100);
+    const linkedinPercentage = Math.round((referrerCounts.linkedin / totalSessions) * 100);
+    const otherPercentage = Math.round((referrerCounts.other / totalSessions) * 100);
+
+    // Group by referrer source for detailed stats
+    const referrerGroups = sessionsData.reduce((acc: any, session: any) => {
+      const key = session.referrer_display;
+      if (!acc[key]) {
+        acc[key] = {
+          referrer: key,
+          count: 0,
+          sessions: []
+        };
+      }
+      acc[key].count++;
+      acc[key].sessions.push(session);
+      return acc;
+    }, {});
+
+    const detailedStats = Object.values(referrerGroups)
+      .sort((a: any, b: any) => b.count - a.count)
+      .map((group: any) => ({
+        ...group,
+        percentage: Math.round((group.count / totalSessions) * 100)
+      }));
+
+    return {
+      totalSessions,
+      directPercentage,
+      linkedinPercentage,
+      otherPercentage,
+      detailedStats,
+      sessionsData
+    };
+
+  } catch (error) {
+    console.error('Error fetching referrer stats:', error);
+    return {
+      totalSessions: 0,
+      directPercentage: 0,
+      linkedinPercentage: 0,
+      otherPercentage: 0,
+      detailedStats: [],
+      sessionsData: []
+    };
+  }
+};
+
 export const getAnalyticsStats = async (days: number = 7) => {
   const shouldFilterByDate = days > 0;
   const startDate = new Date();

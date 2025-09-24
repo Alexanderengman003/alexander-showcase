@@ -26,8 +26,9 @@ import {
   Settings
 } from "lucide-react";
 import { LineChart as RechartsLineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart as RechartsBarChart, Bar } from "recharts";
-import { getAnalyticsStats } from "@/lib/analytics";
+import { getAnalyticsStats, getReferrerStats } from "@/lib/analytics";
 import { EventDetailsModal } from "@/components/EventDetailsModal";
+import { ReferrerDetailsModal } from "@/components/ReferrerDetailsModal";
 import ActivityDetailsModal from "@/components/ActivityDetailsModal";
 
 const Analytics = () => {
@@ -40,6 +41,8 @@ const Analytics = () => {
   const [selectedEvent, setSelectedEvent] = useState<{type: string, displayName: string} | null>(null);
   const [activityModalOpen, setActivityModalOpen] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState<any>(null);
+  const [referrerModalOpen, setReferrerModalOpen] = useState(false);
+  const [referrerStats, setReferrerStats] = useState<any>(null);
 
   const timeRanges = [
     { value: "1d", label: "24h", days: 1 },
@@ -64,11 +67,17 @@ const Analytics = () => {
     setActivityModalOpen(true);
   };
 
+  const handleReferrerClick = () => {
+    setReferrerModalOpen(true);
+  };
+
   const fetchAnalytics = async (days: number) => {
     setLoading(true);
     try {
       const data = await getAnalyticsStats(days);
+      const referrerData = await getReferrerStats(days);
       setStats(data);
+      setReferrerStats(referrerData);
     } catch (error) {
       console.error('Error fetching analytics:', error);
     } finally {
@@ -296,12 +305,29 @@ const Analytics = () => {
                      </div>
                    ))
                  ) : (
-                   <div className="col-span-full text-center py-8 text-muted-foreground">
-                     <MousePointer className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                     <p>No user interactions yet</p>
-                     <p className="text-xs mt-1">Button clicks and interactions will appear here</p>
-                   </div>
-                 )}
+                    <div className="col-span-full text-center py-8 text-muted-foreground">
+                      <MousePointer className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                      <p>No user interactions yet</p>
+                      <p className="text-xs mt-1">Button clicks and interactions will appear here</p>
+                    </div>
+                  )}
+                  
+                  {/* Traffic Sources Card */}
+                  {referrerStats && (
+                    <div 
+                      className="text-center p-4 rounded-lg bg-card border border-border/50 transition-all duration-200 hover:border-primary hover:shadow-md hover:scale-105 cursor-pointer"
+                      onClick={handleReferrerClick}
+                      title="Click to view detailed traffic sources information"
+                    >
+                      <div className="font-semibold font-modern text-lg text-primary mb-1">
+                        {referrerStats.totalSessions}
+                      </div>
+                      <div className="text-xs font-medium text-foreground mt-1">Traffic Sources</div>
+                      <div className="text-xs text-muted-foreground mt-1">
+                        {referrerStats.directPercentage}% Direct • {referrerStats.linkedinPercentage}% LinkedIn
+                      </div>
+                    </div>
+                  )}
                </div>
             </CardContent>
           </Card>
@@ -582,6 +608,13 @@ const Analytics = () => {
           setSelectedActivity(null);
         }}
         activity={selectedActivity}
+      />
+
+      {/* Referrer Details Modal */}
+      <ReferrerDetailsModal
+        isOpen={referrerModalOpen}
+        onClose={() => setReferrerModalOpen(false)}
+        timeRange={timeRange}
       />
     </div>
   );
