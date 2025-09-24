@@ -106,7 +106,13 @@ export function Education() {
                               href="https://www.kth.se/"
                               target="_blank"
                               rel="noopener noreferrer"
-                              onClick={() => track('institution_name_click', { institution: edu.school, source: 'education_section' })}
+                              onClick={() => track('education_click', { 
+                                clickType: 'institution_link',
+                                institution: edu.school,
+                                degree: edu.degree,
+                                source: 'education_section',
+                                timestamp: Date.now()
+                              })}
                               className="text-sm font-medium hover:text-primary transition-colors cursor-pointer inline-flex items-center gap-1"
                             >
                               {edu.school}
@@ -155,7 +161,13 @@ export function Education() {
                           href="https://www.kth.se/"
                           target="_blank"
                           rel="noopener noreferrer"
-                          onClick={() => track('institution_name_click', { institution: edu.school, source: 'education_section' })}
+                          onClick={() => track('education_click', { 
+                            clickType: 'institution_link',
+                            institution: edu.school,
+                            degree: edu.degree,
+                            source: 'education_section',
+                            timestamp: Date.now()
+                          })}
                           className="text-sm font-medium hover:text-primary transition-colors cursor-pointer inline-flex items-center gap-1"
                         >
                           <Building className="h-3 w-3" />

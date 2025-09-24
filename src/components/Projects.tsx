@@ -82,7 +82,7 @@ export function Projects() {
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center mb-8">
           <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Research Projects & Technical Expertise
+            Projects & Research
           </h2>
           <p className="mt-4 text-lg leading-8 text-muted-foreground">
             Academic research and engineering projects showcasing expertise in semiconductor technology, 
@@ -192,7 +192,14 @@ export function Projects() {
                              href={project.institution === "Ascilion AB" ? "https://www.ascilion.com/" : "https://www.kth.se/"}
                              target="_blank"
                              rel="noopener noreferrer"
-                             onClick={() => track('institution_name_click', { institution: project.institution, source: 'projects_section' })}
+                             onClick={() => track('project_click', { 
+                               clickType: 'institution_link',
+                               projectTitle: project.title,
+                               institution: project.institution,
+                               category: project.category,
+                               source: 'projects_section',
+                               timestamp: Date.now()
+                             })}
                              className="text-sm font-medium hover:text-primary transition-colors cursor-pointer inline-flex items-center gap-1"
                            >
                              {project.institution}
@@ -242,7 +249,14 @@ export function Projects() {
                              href={project.institution === "Ascilion AB" ? "https://www.ascilion.com/" : "https://www.kth.se/"}
                              target="_blank"
                              rel="noopener noreferrer"
-                             onClick={() => track('institution_name_click', { institution: project.institution, source: 'projects_section' })}
+                             onClick={() => track('project_click', { 
+                               clickType: 'institution_link',
+                               projectTitle: project.title,
+                               institution: project.institution,
+                               category: project.category,
+                               source: 'projects_section',
+                               timestamp: Date.now()
+                             })}
                              className="text-sm font-medium hover:text-primary transition-colors cursor-pointer inline-flex items-center gap-1"
                            >
                             <Building className="h-3 w-3" />

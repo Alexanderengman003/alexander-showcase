@@ -527,7 +527,13 @@ export function Professional() {
                               href="https://my.avnet.com/ebv/"
                               target="_blank"
                               rel="noopener noreferrer"
-                              onClick={() => track('company_logo_click', { company: 'EBV Elektronik', source: 'professional_section' })}
+                              onClick={() => track('professional_click', { 
+                                clickType: 'company_logo',
+                                company: 'EBV Elektronik',
+                                roleTitle: 'Technical Account Manager',
+                                source: 'professional_section',
+                                timestamp: Date.now()
+                              })}
                               className="hover:opacity-80 transition-opacity"
                             >
                               <img 
@@ -542,7 +548,13 @@ export function Professional() {
                               href="https://www.ascilion.com/"
                               target="_blank"
                               rel="noopener noreferrer"
-                              onClick={() => track('company_logo_click', { company: 'Ascilion AB', source: 'professional_section' })}
+                              onClick={() => track('professional_click', { 
+                                clickType: 'company_logo',
+                                company: 'Ascilion AB',
+                                roleTitle: role.title,
+                                source: 'professional_section',
+                                timestamp: Date.now()
+                              })}
                               className="hover:opacity-80 transition-opacity"
                             >
                               <img 
@@ -557,7 +569,13 @@ export function Professional() {
                               href="https://www.brightdaygraphene.se/"
                               target="_blank"
                               rel="noopener noreferrer"
-                              onClick={() => track('company_logo_click', { company: 'Bright Day Graphene AB', source: 'professional_section' })}
+                              onClick={() => track('professional_click', { 
+                                clickType: 'company_logo',
+                                company: 'Bright Day Graphene AB',
+                                roleTitle: 'Process Engineer',
+                                source: 'professional_section',
+                                timestamp: Date.now()
+                              })}
                               className="hover:opacity-80 transition-opacity"
                             >
                               <img 
@@ -572,7 +590,13 @@ export function Professional() {
                               href="https://www.exeger.com/"
                               target="_blank"
                               rel="noopener noreferrer"
-                              onClick={() => track('company_logo_click', { company: 'Exeger Operations AB', source: 'professional_section' })}
+                              onClick={() => track('professional_click', { 
+                                clickType: 'company_logo',
+                                company: 'Exeger Operations AB',
+                                roleTitle: 'Application Engineer',
+                                source: 'professional_section',
+                                timestamp: Date.now()
+                              })}
                               className="hover:opacity-80 transition-opacity"
                             >
                               <img 
@@ -597,7 +621,13 @@ export function Professional() {
                             }
                             target="_blank"
                             rel="noopener noreferrer"
-                            onClick={() => track('company_name_click', { company: role.company, source: 'professional_section' })}
+                            onClick={() => track('professional_click', { 
+                              clickType: 'company_name',
+                              company: role.company,
+                              roleTitle: role.title,
+                              source: 'professional_section',
+                              timestamp: Date.now()
+                            })}
                             className="text-sm font-medium hover:text-primary transition-colors cursor-pointer inline-flex items-center gap-1"
                           >
                             {role.company}
@@ -679,7 +709,13 @@ export function Professional() {
                             href="https://my.avnet.com/ebv/"
                             target="_blank"
                             rel="noopener noreferrer"
-                            onClick={() => track('company_logo_click', { company: 'EBV Elektronik', source: 'professional_section' })}
+                            onClick={() => track('professional_click', { 
+                              clickType: 'company_logo',
+                              company: 'EBV Elektronik',
+                              roleTitle: role.title,
+                              source: 'professional_section',
+                              timestamp: Date.now()
+                            })}
                             className="hover:opacity-80 transition-opacity"
                           >
                             <img 
@@ -694,7 +730,13 @@ export function Professional() {
                             href="https://www.ascilion.com/"
                             target="_blank"
                             rel="noopener noreferrer"
-                            onClick={() => track('company_logo_click', { company: 'Ascilion AB', source: 'professional_section' })}
+                            onClick={() => track('professional_click', { 
+                              clickType: 'company_logo',
+                              company: 'Ascilion AB',
+                              roleTitle: role.title,
+                              source: 'professional_section',
+                              timestamp: Date.now()
+                            })}
                             className="hover:opacity-80 transition-opacity"
                           >
                             <img 
@@ -709,7 +751,13 @@ export function Professional() {
                             href="https://www.brightdaygraphene.se/"
                             target="_blank"
                             rel="noopener noreferrer"
-                            onClick={() => track('company_logo_click', { company: 'Bright Day Graphene AB', source: 'professional_section' })}
+                            onClick={() => track('professional_click', { 
+                              clickType: 'company_logo',
+                              company: 'Bright Day Graphene AB',
+                              roleTitle: role.title,
+                              source: 'professional_section',
+                              timestamp: Date.now()
+                            })}
                             className="hover:opacity-80 transition-opacity"
                           >
                             <img 
@@ -724,7 +772,13 @@ export function Professional() {
                             href="https://www.exeger.com/"
                             target="_blank"
                             rel="noopener noreferrer"
-                            onClick={() => track('company_logo_click', { company: 'Exeger Operations AB', source: 'professional_section' })}
+                            onClick={() => track('professional_click', { 
+                              clickType: 'company_logo',
+                              company: 'Exeger Operations AB',
+                              roleTitle: role.title,
+                              source: 'professional_section',
+                              timestamp: Date.now()
+                            })}
                             className="hover:opacity-80 transition-opacity"
                           >
                             <img 
@@ -747,7 +801,13 @@ export function Professional() {
                           }
                           target="_blank"
                           rel="noopener noreferrer"
-                          onClick={() => track('company_name_click', { company: role.company, source: 'professional_section' })}
+                          onClick={() => track('professional_click', { 
+                            clickType: 'company_name',
+                            company: role.company,
+                            roleTitle: role.title,
+                            source: 'professional_section',
+                            timestamp: Date.now()
+                          })}
                           className="text-sm font-medium hover:text-primary transition-colors cursor-pointer inline-flex items-center gap-1"
                         >
                           <Building className="h-3 w-3" />
