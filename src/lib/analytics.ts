@@ -124,7 +124,13 @@ const getOperatingSystem = (): string => {
 // Infer referrer from document or UTM parameters (conservative)
 const inferReferrer = (): string | null => {
   try {
-    if (document.referrer) return document.referrer;
+    if (document.referrer) {
+      // Filter out development traffic from lovable.dev
+      if (document.referrer.includes('lovable.dev')) {
+        return null;
+      }
+      return document.referrer;
+    }
   } catch {}
 
   try {
@@ -292,7 +298,12 @@ export const getReferrerStats = async (days: number = 7) => {
       other: 0
     };
 
-    const sessionsData = sessions.map(session => {
+    // Filter out sessions with lovable.dev referrers
+    const filteredSessions = sessions.filter(session => 
+      !session.referrer || !session.referrer.includes('lovable.dev')
+    );
+
+    const sessionsData = filteredSessions.map(session => {
       let category = 'direct';
       
       if (session.referrer) {
@@ -314,7 +325,7 @@ export const getReferrerStats = async (days: number = 7) => {
       };
     });
 
-    const totalSessions = sessions.length;
+    const totalSessions = filteredSessions.length;
     
     // Calculate percentages
     const directPercentage = Math.round((referrerCounts.direct / totalSessions) * 100);
