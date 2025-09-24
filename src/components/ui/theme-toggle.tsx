@@ -11,7 +11,11 @@ export function ThemeToggle() {
     setTheme(newTheme);
     
     // Track theme change as user interaction
-    await trackEvent('theme_toggle', { 
+    await trackEvent('Click', { 
+      type: 'theme_toggle',
+      section: 'Header',
+      action: 'theme_toggle_click',
+      item: 'Theme toggle button',
       from: theme, 
       to: newTheme 
     });

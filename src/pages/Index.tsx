@@ -29,10 +29,11 @@ const Index = () => {
         // Track desktop analytics access
         import('@/hooks/useTrackEvent').then(({ useTrackEvent }) => {
           const { track } = useTrackEvent();
-          track('Link click', {
-            type: 'analytics',
+          track('Click', {
+            type: 'analytics_access',
             section: 'Analytics Access',
-            item: 'Analytics dashboard',
+            action: 'keyboard_shortcut',
+            item: 'Analytics dashboard access',
             method: 'keyboard_shortcut',
             source: 'ctrl_shift_a'
           });
@@ -61,10 +62,11 @@ const Index = () => {
           // Track mobile analytics access
           import('@/hooks/useTrackEvent').then(({ useTrackEvent }) => {
             const { track } = useTrackEvent();
-            track('Link click', {
-              type: 'analytics',
+            track('Click', {
+              type: 'analytics_access',
               section: 'Analytics Access',
-              item: 'Analytics dashboard',
+              action: 'tap_sequence',
+              item: 'Analytics dashboard access',
               method: 'tap_sequence',
               source: 'footer'
             });

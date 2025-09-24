@@ -45,10 +45,13 @@ export function Education() {
             <div className="inline-flex rounded-lg bg-muted p-1">
               <button
                 onClick={() => {
-                  track("Filter applied", { 
+                  track("Filter", { 
+                    type: 'view_mode',
                     section: "Education",
+                    action: 'view_toggle',
                     filter: "view_mode",
-                    value: "card"
+                    value: "card",
+                    item: 'Card view button'
                   });
                   setViewMode('card');
                 }}
@@ -62,10 +65,13 @@ export function Education() {
               </button>
               <button
                 onClick={() => {
-                  track("Filter applied", { 
+                  track("Filter", { 
+                    type: 'view_mode',
                     section: "Education",
+                    action: 'view_toggle',
                     filter: "view_mode",
-                    value: "list"
+                    value: "list",
+                    item: 'List view button'
                   });
                   setViewMode('list');
                 }}
@@ -102,11 +108,12 @@ export function Education() {
                               href="https://www.kth.se/"
                               target="_blank"
                               rel="noopener noreferrer"
-                              onClick={() => track("Link click", {
-                                type: 'institution',
+                              onClick={() => track("Click", {
+                                type: 'institution_link',
                                 section: "Education",
+                                action: 'link_click',
                                 item: edu.school,
-                                degree: edu.degree,
+                                details: edu.degree,
                                 url: "https://www.kth.se/"
                               })}
                               className="text-sm font-medium hover:text-primary transition-colors cursor-pointer inline-flex items-center gap-1"
@@ -157,11 +164,12 @@ export function Education() {
                           href="https://www.kth.se/"
                           target="_blank"
                           rel="noopener noreferrer"
-                          onClick={() => track("Link click", {
-                            type: 'institution',
+                          onClick={() => track("Click", {
+                            type: 'institution_link',
                             section: "Education",
+                            action: 'link_click',
                             item: edu.school,
-                            degree: edu.degree,
+                            details: edu.degree,
                             url: "https://www.kth.se/"
                           })}
                           className="text-sm font-medium hover:text-primary transition-colors cursor-pointer inline-flex items-center gap-1"

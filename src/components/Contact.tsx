@@ -68,11 +68,14 @@ export function Contact() {
 
     try {
       // Track form submission attempt
-      await track('contact_form_submission', {
+      await track('Click', {
+        type: 'form_submission',
+        section: 'Contact',
+        action: 'form_submit',
+        item: 'Contact form',
         hasPhone: !!formData.phone,
         subjectLength: formData.subject.length,
-        messageLength: formData.message.length,
-        source: 'contact_form'
+        messageLength: formData.message.length
       });
 
       await emailjs.send(
@@ -90,8 +93,11 @@ export function Contact() {
       );
 
       // Track successful submission
-      await track('contact_form_success', {
-        source: 'contact_form'
+      await track('Click', {
+        type: 'form_success',
+        section: 'Contact',
+        action: 'form_success',
+        item: 'Contact form submitted successfully'
       });
 
       toast({
@@ -106,9 +112,12 @@ export function Contact() {
       console.error("EmailJS error:", error);
       
       // Track form submission error
-      await track('contact_form_error', {
-        error: error instanceof Error ? error.message : 'Unknown error',
-        source: 'contact_form'
+      await track('Click', {
+        type: 'form_error',
+        section: 'Contact',
+        action: 'form_error',
+        item: 'Contact form error',
+        error: error instanceof Error ? error.message : 'Unknown error'
       });
 
       toast({
@@ -157,18 +166,22 @@ export function Contact() {
                       className="text-foreground hover:text-primary transition-colors"
                       onClick={() => {
                         if (item.label === "Email") {
-                          track('Link click', { 
-                            type: 'email', 
+                          track('Click', { 
+                            type: 'contact_info',
                             section: 'Contact', 
+                            action: 'email_click',
                             item: 'Email address',
-                            url: `mailto:${item.href.replace('mailto:', '')}`
+                            url: `mailto:${item.href.replace('mailto:', '')}`,
+                            value: item.href.replace('mailto:', '')
                           });
                         } else if (item.label === "Phone") {
-                          track('Link click', { 
-                            type: 'phone', 
+                          track('Click', { 
+                            type: 'contact_info',
                             section: 'Contact', 
+                            action: 'phone_click',
                             item: 'Phone number',
-                            url: `tel:${item.href.replace('tel:', '')}`
+                            url: `tel:${item.href.replace('tel:', '')}`,
+                            value: item.href.replace('tel:', '')
                           });
                         }
                       }}

@@ -97,10 +97,13 @@ export function Projects() {
                 <button
                   key={category}
                   onClick={() => {
-                    track("Filter applied", { 
+                    track("Filter", { 
+                      type: 'category_filter',
                       section: "Projects & Research",
+                      action: 'category_button_click',
                       filter: "category",
-                      value: category
+                      value: category,
+                      item: `${category} category button`
                     });
                     setSelectedCategory(category);
                   }}
@@ -118,10 +121,13 @@ export function Projects() {
             <div className="inline-flex rounded-lg bg-muted p-1">
               <button
                 onClick={() => {
-                  track("Filter applied", { 
+                  track("Filter", { 
+                    type: 'view_mode',
                     section: "Projects & Research",
+                    action: 'view_mode_toggle',
                     filter: "view_mode",
-                    value: "card"
+                    value: "card",
+                    item: 'Card view button'
                   });
                   setViewMode('card');
                 }}
@@ -135,10 +141,13 @@ export function Projects() {
               </button>
               <button
                 onClick={() => {
-                  track("Filter applied", { 
+                  track("Filter", { 
+                    type: 'view_mode',
                     section: "Projects & Research",
+                    action: 'view_mode_toggle',
                     filter: "view_mode",
-                    value: "list"
+                    value: "list",
+                    item: 'List view button'
                   });
                   setViewMode('list');
                 }}
@@ -187,9 +196,10 @@ export function Projects() {
                              href={project.institution === "Ascilion AB" ? "https://www.ascilion.com/" : "https://www.kth.se/"}
                              target="_blank"
                              rel="noopener noreferrer"
-                              onClick={() => track("Link click", {
-                                type: 'institution',
+                              onClick={() => track("Click", {
+                                type: 'institution_link',
                                 section: "Projects & Research",
+                                action: 'institution_link_click',
                                 item: project.institution,
                                 project: project.title,
                                 category: project.category,
@@ -244,9 +254,10 @@ export function Projects() {
                              href={project.institution === "Ascilion AB" ? "https://www.ascilion.com/" : "https://www.kth.se/"}
                              target="_blank"
                              rel="noopener noreferrer"
-                              onClick={() => track("Link click", {
-                                type: 'institution',
+                              onClick={() => track("Click", {
+                                type: 'institution_link',
                                 section: "Projects & Research",
+                                action: 'institution_link_click',
                                 item: project.institution,
                                 project: project.title,
                                 category: project.category,

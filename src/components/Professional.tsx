@@ -131,10 +131,13 @@ export function Professional() {
     setSelectedTechnologies(newTechnologies);
     
     // Track filter state
-    track("Filter applied", {
+    track("Filter", {
+      type: 'technology_filter',
       section: "Professional Experience",
+      action: 'technology_toggle',
       filter: "technology",
       value: newTechnologies.join(", "),
+      item: 'Technology dropdown filter',
       totalResults: professionalRoles.filter(role => {
         const areaMatch = selectedArea === "All" || role.area.includes(selectedArea);
         const techMatch = newTechnologies.length === 0 || 
@@ -150,10 +153,13 @@ export function Professional() {
     setSelectedTechnologies([]);
     
     // Track filter clear
-    track("Filter applied", {
+    track("Filter", {
+      type: 'technology_filter',
       section: "Professional Experience", 
+      action: 'clear_technologies',
       filter: "technology",
       value: "cleared",
+      item: 'Clear all technologies',
       totalResults: professionalRoles.filter(role => {
         const areaMatch = selectedArea === "All" || role.area.includes(selectedArea);
         const softwareMatch = selectedSoftware.length === 0 || 
@@ -171,10 +177,13 @@ export function Professional() {
     setSelectedSoftware(newSoftware);
     
     // Track filter state
-    track("Filter applied", {
+    track("Filter", {
+      type: 'software_filter',
       section: "Professional Experience",
+      action: 'software_toggle',
       filter: "software", 
       value: newSoftware.join(", "),
+      item: 'Software dropdown filter',
       totalResults: professionalRoles.filter(role => {
         const areaMatch = selectedArea === "All" || role.area.includes(selectedArea);
         const techMatch = selectedTechnologies.length === 0 || 
@@ -190,10 +199,13 @@ export function Professional() {
     setSelectedSoftware([]);
     
     // Track filter clear
-    track("Filter applied", {
+    track("Filter", {
+      type: 'software_filter',
       section: "Professional Experience",
+      action: 'clear_software',
       filter: "software",
       value: "cleared", 
+      item: 'Clear all software',
       totalResults: professionalRoles.filter(role => {
         const areaMatch = selectedArea === "All" || role.area.includes(selectedArea);
         const techMatch = selectedTechnologies.length === 0 || 
@@ -226,18 +238,24 @@ export function Professional() {
                   <button
                     key={area}
                     onClick={() => {
-                      track("Filter applied", { 
+                      track("Filter", { 
+                        type: 'area_filter',
                         section: "Professional Experience",
+                        action: 'area_button_click',
                         filter: "area",
-                        value: area
+                        value: area,
+                        item: `${area} area button`
                       });
                       setSelectedArea(area);
                       
                       // Track comprehensive filter state
-                      track("Filter applied", {
+                      track("Filter", {
+                        type: 'area_filter',
                         section: "Professional Experience",
+                        action: 'area_comprehensive',
                         filter: "area",
                         value: area,
+                        item: `${area} area comprehensive filter`,
                         totalResults: professionalRoles.filter(role => {
                           const areaMatch = area === "All" || role.area.includes(area);
                           const techMatch = selectedTechnologies.length === 0 || 
@@ -289,10 +307,13 @@ export function Professional() {
                           e.preventDefault();
                         }}
                         onCheckedChange={(checked) => {
-                          track("Filter applied", { 
+                          track("Filter", { 
+                            type: 'technology_dropdown',
                             section: "Professional Experience",
+                            action: 'dropdown_technology_select',
                             filter: "technology",
-                            value: tech
+                            value: tech,
+                            item: `Technology: ${tech}`
                           });
                           handleTechnologyToggle(tech);
                         }}
@@ -332,10 +353,13 @@ export function Professional() {
                           e.preventDefault();
                         }}
                         onCheckedChange={(checked) => {
-                          track("Filter applied", { 
+                          track("Filter", { 
+                            type: 'software_dropdown',
                             section: "Professional Experience",
+                            action: 'dropdown_software_select',
                             filter: "software",
-                            value: software
+                            value: software,
+                            item: `Software: ${software}`
                           });
                           handleSoftwareToggle(software);
                         }}
@@ -353,10 +377,13 @@ export function Professional() {
             <div className="inline-flex rounded-lg bg-muted p-1 flex-shrink-0">
               <button
                 onClick={() => {
-                  track("Filter applied", { 
+                  track("Filter", { 
+                    type: 'view_mode',
                     section: "Professional Experience",
+                    action: 'view_mode_toggle',
                     filter: "view_mode",
-                    value: "card"
+                    value: "card",
+                    item: 'Card view button'
                   });
                   setViewMode('card');
                 }}
@@ -370,10 +397,13 @@ export function Professional() {
               </button>
               <button
                 onClick={() => {
-                  track("Filter applied", { 
+                  track("Filter", { 
+                    type: 'view_mode',
                     section: "Professional Experience",
+                    action: 'view_mode_toggle',
                     filter: "view_mode",
-                    value: "list"
+                    value: "list",
+                    item: 'List view button'
                   });
                   setViewMode('list');
                 }}
@@ -419,10 +449,13 @@ export function Professional() {
                         e.preventDefault();
                       }}
                         onCheckedChange={(checked) => {
-                          track("Filter applied", { 
+                          track("Filter", { 
+                            type: 'technology_dropdown_mobile',
                             section: "Professional Experience",
+                            action: 'mobile_dropdown_technology_select',
                             filter: "technology",
-                            value: tech
+                            value: tech,
+                            item: `Technology: ${tech} (mobile)`
                           });
                           handleTechnologyToggle(tech);
                         }}
@@ -462,10 +495,13 @@ export function Professional() {
                         e.preventDefault();
                       }}
                         onCheckedChange={(checked) => {
-                          track("Filter applied", { 
+                          track("Filter", { 
+                            type: 'software_dropdown_mobile',
                             section: "Professional Experience",
+                            action: 'mobile_dropdown_software_select',
                             filter: "software",
-                            value: software
+                            value: software,
+                            item: `Software: ${software} (mobile)`
                           });
                           handleSoftwareToggle(software);
                         }}
@@ -501,9 +537,10 @@ export function Professional() {
                               href="https://my.avnet.com/ebv/"
                               target="_blank"
                               rel="noopener noreferrer"
-                              onClick={() => track("Link click", {
-                                type: 'company',
+                              onClick={() => track("Click", {
+                                type: 'company_logo',
                                 section: "Professional Experience",
+                                action: 'company_logo_click',
                                 item: "EBV Elektronik",
                                 position: "Technical Account Manager",
                                 url: "https://my.avnet.com/ebv/"
@@ -522,9 +559,10 @@ export function Professional() {
                               href="https://www.ascilion.com/"
                               target="_blank"
                               rel="noopener noreferrer"
-                              onClick={() => track("Link click", {
-                                type: 'company',
+                              onClick={() => track("Click", {
+                                type: 'company_logo',
                                 section: "Professional Experience",
+                                action: 'company_logo_click',
                                 item: "Ascilion AB",
                                 position: role.title,
                                 url: "https://www.ascilion.com/"
@@ -543,9 +581,10 @@ export function Professional() {
                               href="https://www.brightdaygraphene.se/"
                               target="_blank"
                               rel="noopener noreferrer"
-                              onClick={() => track("Link click", {
-                                type: 'company',
+                              onClick={() => track("Click", {
+                                type: 'company_logo',
                                 section: "Professional Experience",
+                                action: 'company_logo_click',
                                 item: "Bright Day Graphene AB",
                                 position: "Process Engineer",
                                 url: "https://www.brightdaygraphene.se/"
@@ -564,9 +603,10 @@ export function Professional() {
                               href="https://www.exeger.com/"
                               target="_blank"
                               rel="noopener noreferrer"
-                              onClick={() => track("Link click", {
-                                type: 'company',
+                              onClick={() => track("Click", {
+                                type: 'company_logo',
                                 section: "Professional Experience",
+                                action: 'company_logo_click',
                                 item: "Exeger Operations AB",
                                 position: "Application Engineer",
                                 url: "https://www.exeger.com/"
@@ -595,9 +635,10 @@ export function Professional() {
                             }
                             target="_blank"
                             rel="noopener noreferrer"
-                            onClick={() => track("Link click", {
-                              type: 'company',
+                            onClick={() => track("Click", {
+                              type: 'company_name',
                               section: "Professional Experience",
+                              action: 'company_name_click',
                               item: role.company,
                               position: role.title,
                               url: role.company === "EBV Elektronik" ? "https://my.avnet.com/ebv/" :
@@ -686,9 +727,10 @@ export function Professional() {
                             href="https://my.avnet.com/ebv/"
                             target="_blank"
                             rel="noopener noreferrer"
-                            onClick={() => track("Link click", {
-                              type: 'company',
+                            onClick={() => track("Click", {
+                              type: 'company_logo',
                               section: "Professional Experience",
+                              action: 'company_logo_click',
                               item: "EBV Elektronik",
                               position: role.title,
                               url: "https://my.avnet.com/ebv/"
@@ -707,9 +749,10 @@ export function Professional() {
                             href="https://www.ascilion.com/"
                             target="_blank"
                             rel="noopener noreferrer"
-                            onClick={() => track("Link click", {
-                              type: 'company',
+                            onClick={() => track("Click", {
+                              type: 'company_logo',
                               section: "Professional Experience",
+                              action: 'company_logo_click',
                               item: "Ascilion AB",
                               position: role.title,
                               url: "https://www.ascilion.com/"
@@ -728,9 +771,10 @@ export function Professional() {
                             href="https://www.brightdaygraphene.se/"
                             target="_blank"
                             rel="noopener noreferrer"
-                            onClick={() => track("Link click", {
-                              type: 'company',
+                            onClick={() => track("Click", {
+                              type: 'company_logo',
                               section: "Professional Experience",
+                              action: 'company_logo_click',
                               item: "Bright Day Graphene AB",
                               position: role.title,
                               url: "https://www.brightdaygraphene.se/"
@@ -749,9 +793,10 @@ export function Professional() {
                             href="https://www.exeger.com/"
                             target="_blank"
                             rel="noopener noreferrer"
-                            onClick={() => track("Link click", {
-                              type: 'company',
+                            onClick={() => track("Click", {
+                              type: 'company_logo',
                               section: "Professional Experience",
+                              action: 'company_logo_click',
                               item: "Exeger Operations AB",
                               position: role.title,
                               url: "https://www.exeger.com/"
@@ -778,9 +823,10 @@ export function Professional() {
                           }
                           target="_blank"
                           rel="noopener noreferrer"
-                          onClick={() => track("Link click", {
-                            type: 'company',
+                          onClick={() => track("Click", {
+                            type: 'company_name',
                             section: "Professional Experience",
+                            action: 'company_name_click',
                             item: role.company,
                             position: role.title,
                             url: role.company === "EBV Elektronik" ? "https://my.avnet.com/ebv/" :

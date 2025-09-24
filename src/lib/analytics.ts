@@ -295,12 +295,14 @@ export const getAnalyticsStats = async (days: number = 7) => {
       }))
       .sort((a, b) => b.count - a.count);
 
-    // Filter tracking stats for all sections
-    const filterEvents = events?.filter(event => event.event_type === 'Filter applied') || [];
+    // Filter tracking stats for all sections - updated for new event structure
+    const filterEvents = events?.filter(event => event.event_type === 'Filter') || [];
+    const clickEvents = events?.filter(event => event.event_type === 'Click') || [];
+
     const filterStats = filterEvents.reduce((acc: any, event) => {
       const eventData = event.event_data as any;
-      if (eventData && eventData.section && eventData.filter && eventData.value) {
-        const key = `${eventData.section}: ${eventData.filter} = ${eventData.value}`;
+      if (eventData && eventData.section && eventData.item) {
+        const key = `${eventData.section}: ${eventData.item}`;
         acc[key] = (acc[key] || 0) + 1;
       }
       return acc;
