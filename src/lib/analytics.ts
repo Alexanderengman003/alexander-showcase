@@ -473,17 +473,6 @@ export const getAnalyticsStats = async (days: number = 7) => {
       .sort((a, b) => b.count - a.count)
       .slice(0, 8);
 
-    // Add device types as interaction cards
-    const deviceInteractions = deviceTypes?.map((device: any) => ({
-      event: `${device.type} Device`,
-      count: device.count,
-      percentage: device.percentage
-    })) || [];
-
-    // Combine events and device interactions
-    const allInteractions = [...topEvents, ...deviceInteractions]
-      .sort((a, b) => b.count - a.count);
-
     // Country statistics
     const countryStats = pageViews?.reduce((acc: any, view) => {
       const country = view.country || 'Unknown';
@@ -528,7 +517,7 @@ export const getAnalyticsStats = async (days: number = 7) => {
       recentActivity: combinedActivity,
       allCountries,
       allCities,
-      topEvents: allInteractions,
+      topEvents,
       totalEvents: events?.length || 0
     };
 
