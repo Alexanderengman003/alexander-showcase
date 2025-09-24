@@ -27,7 +27,7 @@ import {
 import { LineChart as RechartsLineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart as RechartsBarChart, Bar } from "recharts";
 import { getAnalyticsStats } from "@/lib/analytics";
 import { EventDetailsModal } from "@/components/EventDetailsModal";
-import PageViewDetailsModal from "@/components/PageViewDetailsModal";
+import ActivityDetailsModal from "@/components/ActivityDetailsModal";
 
 const Analytics = () => {
   // Don't track visits to the analytics page itself
@@ -37,8 +37,8 @@ const Analytics = () => {
   const [loading, setLoading] = useState(true);
   const [eventModalOpen, setEventModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<{type: string, displayName: string} | null>(null);
-  const [pageViewModalOpen, setPageViewModalOpen] = useState(false);
-  const [selectedPageView, setSelectedPageView] = useState<{page: string, time: string, location: string, data?: any} | null>(null);
+  const [activityModalOpen, setActivityModalOpen] = useState(false);
+  const [selectedActivity, setSelectedActivity] = useState<any>(null);
 
   const timeRanges = [
     { value: "1d", label: "24h", days: 1 },
@@ -58,14 +58,9 @@ const Analytics = () => {
     setEventModalOpen(true);
   };
 
-  const handlePageViewClick = (page: string, time: string, location: string, data?: any) => {
-    setSelectedPageView({
-      page,
-      time,
-      location,
-      data
-    });
-    setPageViewModalOpen(true);
+  const handleActivityClick = (activity: any) => {
+    setSelectedActivity(activity);
+    setActivityModalOpen(true);
   };
 
   const fetchAnalytics = async (days: number) => {
@@ -473,14 +468,8 @@ const Analytics = () => {
                         <Card 
                           key={index} 
                           className="p-3 transition-all duration-200 hover:shadow-md hover:scale-[1.02] cursor-pointer hover:border-primary bg-card border border-border/50"
-                          onClick={activity.type === 'event' 
-                            ? () => handleEventClick(activity.action)
-                            : () => handlePageViewClick(activity.page, activity.time, activity.location, activity.data)
-                          }
-                          title={activity.type === 'event' 
-                            ? `Click to view detailed ${activity.action.toLowerCase()} information` 
-                            : `Click to view detailed page view information`
-                          }
+                          onClick={() => handleActivityClick(activity)}
+                          title="Click to view detailed activity information"
                         >
                           <div className="flex items-start space-x-3">
                             <div className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 ${
@@ -504,10 +493,7 @@ const Analytics = () => {
                                   {activity.data.source && `Source: ${activity.data.source}`}
                                 </div>
                               )}
-                              {activity.type === 'event' && (
-                                <div className="text-xs text-primary mt-1 font-medium">Click for details →</div>
-                              )}
-                              {activity.type === 'page_view' && (
+                              {(activity.type === 'event' || activity.type === 'page_view') && (
                                 <div className="text-xs text-primary mt-1 font-medium">Click for details →</div>
                               )}
                             </div>
@@ -541,14 +527,14 @@ const Analytics = () => {
         timeRange={timeRange}
       />
 
-      {/* Page View Details Modal */}
-      <PageViewDetailsModal
-        isOpen={pageViewModalOpen}
+      {/* Activity Details Modal */}
+      <ActivityDetailsModal
+        isOpen={activityModalOpen}
         onClose={() => {
-          setPageViewModalOpen(false);
-          setSelectedPageView(null);
+          setActivityModalOpen(false);
+          setSelectedActivity(null);
         }}
-        pageView={selectedPageView}
+        activity={selectedActivity}
       />
     </div>
   );

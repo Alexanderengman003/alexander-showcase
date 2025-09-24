@@ -7,6 +7,19 @@ import { useTrackEvent } from "@/hooks/useTrackEvent";
 const projects = [
   {
     id: 1,
+    title: "PELSA dISF sampling system",
+    description: "The PELSA system consists of a sampling tool, a monitoring system, and a PC-controlled vacuum unit. Sampling is controlled from the PC through pre-defined sequences and on-screen visual monitoring of the process.",
+    image: "/lovable-uploads/9b0d7032-cf5a-41a6-bd1e-478738857d3e.png",
+    technologies: ["MEMS", "C#", "Electronics design", "SEM Analysis", "Silicon fabrication", "CAD"],
+    githubUrl: null,
+    liveUrl: "https://www.ascilion.com/products",
+    category: "Commercial",
+    date: "Feb 2021 - January 2024",
+    location: "Stockholm, Sweden",
+    institution: "Ascilion AB"
+  },
+  {
+    id: 2,
     title: "Stretchable Microsupercapacitors",
     description: "Master's thesis research developing novel Direct Ink Writing method for 3D printing intrinsically stretchable energy storage devices. Achieved 80% stretchability with 740 µF cm⁻² capacitance using PEDOT:PSS conductive inks on TPU substrates.",
     image: "/lovable-uploads/b2cdba2a-95c9-40fa-8794-4965fa31a5bb.png",
@@ -19,7 +32,7 @@ const projects = [
     institution: "KTH Royal Institute of Technology"
   },
   {
-    id: 2,
+    id: 3,
     title: "Optical MEMS Switch",
     description: "Course project designing and fabricating a mechanical multi-stable optical in-plane switch. Created electrostatic comb drive actuator movable ±15 μm in two directions with locking mechanism using Silicon-on-Insulator wafer fabrication.",
     image: "/lovable-uploads/5e81c449-7442-4078-b624-b4f8d6a2390b.png",
@@ -32,7 +45,7 @@ const projects = [
     institution: "KTH Royal Institute of Technology"
   },
   {
-    id: 3,
+    id: 4,
     title: "MOSFET Interconnect Deposition and Reactive Ion Etching",
     description: "Hands-on CMOS fabrication project completing the final step in MOSFET preparation by adding metal contacts for transistor communication. Involved cleanroom work including photolithography, metal deposition via sputtering, and reactive ion etching to achieve 450nm metal layer thickness with 0.8μm resolution.",
     image: "/lovable-uploads/05a7e279-5b0c-438c-a29c-cd828459a95f.png",
@@ -46,7 +59,7 @@ const projects = [
   },
 ];
 
-const categories = ["All", "Research"];
+const categories = ["All", "Commercial", "Research"];
 
 export function Projects() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -173,19 +186,19 @@ export function Projects() {
                     
                     {project.date && (
                       <div className="flex flex-col gap-2 text-muted-foreground mb-3">
-                        <div className="flex items-center gap-2">
-                          <Building className="h-4 w-4" />
-                          <a 
-                            href="https://www.kth.se/"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={() => track('institution_name_click', { institution: project.institution, source: 'projects_section' })}
-                            className="text-sm font-medium hover:text-primary transition-colors cursor-pointer inline-flex items-center gap-1"
-                          >
-                            {project.institution}
-                            <ExternalLinkIcon className="h-3 w-3" />
-                          </a>
-                        </div>
+                         <div className="flex items-center gap-2">
+                           <Building className="h-4 w-4" />
+                           <a 
+                             href={project.institution === "Ascilion AB" ? "https://www.ascilion.com/" : "https://www.kth.se/"}
+                             target="_blank"
+                             rel="noopener noreferrer"
+                             onClick={() => track('institution_name_click', { institution: project.institution, source: 'projects_section' })}
+                             className="text-sm font-medium hover:text-primary transition-colors cursor-pointer inline-flex items-center gap-1"
+                           >
+                             {project.institution}
+                             <ExternalLinkIcon className="h-3 w-3" />
+                           </a>
+                         </div>
                         <div className="flex items-center gap-2">
                           <MapPin className="h-4 w-4" />
                           <span className="text-sm">{project.location}</span>
@@ -225,13 +238,13 @@ export function Projects() {
                           {project.title}
                         </h3>
                         <div className="flex flex-col gap-1 text-muted-foreground">
-                          <a 
-                            href="https://www.kth.se/"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={() => track('institution_name_click', { institution: project.institution, source: 'projects_section' })}
-                            className="text-sm font-medium hover:text-primary transition-colors cursor-pointer inline-flex items-center gap-1"
-                          >
+                           <a 
+                             href={project.institution === "Ascilion AB" ? "https://www.ascilion.com/" : "https://www.kth.se/"}
+                             target="_blank"
+                             rel="noopener noreferrer"
+                             onClick={() => track('institution_name_click', { institution: project.institution, source: 'projects_section' })}
+                             className="text-sm font-medium hover:text-primary transition-colors cursor-pointer inline-flex items-center gap-1"
+                           >
                             <Building className="h-3 w-3" />
                             {project.institution}
                             <ExternalLinkIcon className="h-3 w-3" />
