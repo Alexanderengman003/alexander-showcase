@@ -104,11 +104,22 @@ export const EventDetailsModal = ({ isOpen, onClose, eventType, eventDisplayName
 
       const dbEventType = getEventTypeFromDisplay(eventDisplayName);
 
-      // Get events for this specific type
+      // Build candidate event_type variants to support legacy and new naming
+      const titleCase = eventDisplayName; // e.g., "Filter Applied"
+      const lower = titleCase.toLowerCase(); // e.g., "filter applied"
+      const snake = lower.replace(/\s+/g, '_'); // e.g., "filter_applied"
+      const pascalSpaced = titleCase
+        .split(' ')
+        .map((w, i) => (i === 0 ? w[0].toUpperCase() + w.slice(1).toLowerCase() : w.toLowerCase()))
+        .join(' '); // e.g., "Filter applied"
+
+      const candidates = Array.from(new Set([dbEventType, titleCase, pascalSpaced, lower, snake]));
+
+      // Get events for this specific type (match any candidate)
       let eventsQuery = supabase
         .from('analytics_events')
         .select('*')
-        .eq('event_type', dbEventType)
+        .in('event_type', candidates)
         .order('created_at', { ascending: false });
 
       if (startDate) {
