@@ -15,19 +15,19 @@ const getSessionId = (): string => {
   return sessionId;
 };
 
-// Ensure session exists in database - prevent race conditions
+// Ensure session exists in database - prevent race conditions and duplicates
 const ensureSessionExists = async (sessionId: string, geoData: { country?: string; city?: string }) => {
   // Prevent concurrent session creation
   if (sessionCreationInProgress) {
-    // Wait a bit for the other creation to complete
-    await new Promise(resolve => setTimeout(resolve, 100));
+    // Wait for the other creation to complete
+    await new Promise(resolve => setTimeout(resolve, 200));
     return;
   }
 
   try {
     const { data: existingSession, error: sessionError } = await supabase
       .from('analytics_sessions')
-      .select('id')
+      .select('id, first_visit_at')
       .eq('session_id', sessionId)
       .maybeSingle();
 
@@ -39,23 +39,40 @@ const ensureSessionExists = async (sessionId: string, geoData: { country?: strin
       sessionCreationInProgress = true;
       
       try {
-        await supabase
+        // Double-check to prevent race condition duplicates
+        const { data: doubleCheck } = await supabase
           .from('analytics_sessions')
-          .insert({
-            session_id: sessionId,
-            device_type: getDeviceType(),
-            browser: getBrowser(),
-            referrer: document.referrer || null,
-            country: geoData.country || null,
-          });
+          .select('id')
+          .eq('session_id', sessionId)
+          .maybeSingle();
+        
+        if (!doubleCheck) {
+          await supabase
+            .from('analytics_sessions')
+            .insert({
+              session_id: sessionId,
+              device_type: getDeviceType(),
+              browser: getBrowser(),
+              referrer: document.referrer || null,
+              country: geoData.country || null,
+            });
+        }
       } finally {
-        sessionCreationInProgress = false; // Always reset the flag
+        sessionCreationInProgress = false;
       }
     } else if (existingSession) {
       console.log('Using existing session:', sessionId);
+      
+      // Check if this session is very recent (within 5 minutes) to avoid counting page refreshes as new sessions
+      const sessionAge = new Date().getTime() - new Date(existingSession.first_visit_at).getTime();
+      const fiveMinutesInMs = 5 * 60 * 1000;
+      
+      if (sessionAge < fiveMinutesInMs) {
+        console.log('Session is recent, treating as same session');
+      }
     }
   } catch (error) {
-    sessionCreationInProgress = false; // Reset on error
+    sessionCreationInProgress = false;
     throw error;
   }
 };
@@ -201,9 +218,12 @@ export const getAnalyticsStats = async (days: number = 7) => {
       sessions = allSessions?.filter(session => new Date(session.first_visit_at) >= startDate) || [];
     }
 
-    // Calculate stats
+    // Calculate stats with improved unique visitor counting
     const totalViews = pageViews?.length || 0;
-    const uniqueVisitors = sessions?.length || 0;
+    
+    // Group sessions by session_id to ensure true uniqueness
+    const uniqueSessionIds = new Set(sessions?.map(session => session.session_id) || []);
+    const uniqueVisitors = uniqueSessionIds.size;
     
     // Calculate bounce rate (sessions with only 1 page view)
     const bounceCount = sessions?.filter(session => session.page_views_count === 1).length || 0;

@@ -56,19 +56,11 @@ const ActivityDetailsModal: React.FC<ActivityDetailsModalProps> = ({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
-        <DialogHeader className="flex flex-row items-center justify-between">
+        <DialogHeader>
           <DialogTitle className="font-modern text-xl flex items-center gap-2">
             {getActivityIcon()}
             {getActivityTitle()}
           </DialogTitle>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onClose}
-            className="h-8 w-8 p-0"
-          >
-            <X className="h-4 w-4" />
-          </Button>
         </DialogHeader>
 
         <div className="space-y-6">
