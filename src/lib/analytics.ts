@@ -392,27 +392,36 @@ export const getAnalyticsStats = async (days: number = 7) => {
     console.log('Traffic data sample:', trafficData.slice(0, 5));
     console.log('Total traffic data points:', trafficData.length);
 
-    // Recent activity - use ALL data (no time filtering)
+    // Recent activity - use ALL data (no time filtering) 
     const recentPageViews = allPageViews
       ?.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()) // Sort by newest first
-      .map(view => ({
-        action: 'Page view',
-        page: view.page_path === '/' ? 'Home' : view.page_path,
-        time: getTimeAgo(new Date(view.created_at)),
-        location: view.city && view.country ? `${view.city}, ${view.country}` : view.country || 'Unknown',
-        type: 'page_view',
-        data: {
-          referrer: view.referrer,
-          userAgent: view.user_agent,
-          device: view.device_type,
-          browser: view.browser,
-          operatingSystem: view.operating_system,
-          ipAddress: view.ip_address,
-          sessionId: view.session_id,
-          pageTitle: view.page_title
-        },
-        timestamp: view.created_at
-      })) || [];
+      .map(view => {
+        // Extract section from page_path
+        let section = 'Home';
+        if (view.page_path && view.page_path !== '/') {
+          const path = view.page_path.replace('/#', '').replace('#', '');
+          section = path.charAt(0).toUpperCase() + path.slice(1) || 'Home';
+        }
+        
+        return {
+          action: 'Page view',
+          page: section,
+          time: getTimeAgo(new Date(view.created_at)),
+          location: view.city && view.country ? `${view.city}, ${view.country}` : view.country || 'Unknown',
+          type: 'page_view',
+          data: {
+            referrer: view.referrer,
+            userAgent: view.user_agent,
+            device: view.device_type,
+            browser: view.browser,
+            operatingSystem: view.operating_system,
+            ipAddress: view.ip_address,
+            sessionId: view.session_id,
+            pageTitle: view.page_title
+          },
+          timestamp: view.created_at
+        };
+      }) || [];
 
     const recentEvents = allEvents
       ?.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()) // Sort by newest first
@@ -429,9 +438,21 @@ export const getAnalyticsStats = async (days: number = 7) => {
           displayAction = event.event_type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
         }
         
+        // Extract section from event data or page path
+        let section = 'Unknown';
+        const eventData = event.event_data as any;
+        if (eventData && eventData.section) {
+          section = eventData.section;
+        } else if (event.page_path && event.page_path !== '/') {
+          const path = event.page_path.replace('/#', '').replace('#', '');
+          section = path.charAt(0).toUpperCase() + path.slice(1) || 'Home';
+        } else if (event.page_path === '/') {
+          section = 'Home';
+        }
+        
         return {
           action: displayAction,
-          page: event.page_path || 'Unknown',
+          page: section,
           time: getTimeAgo(new Date(event.created_at)),
           location: 'User Interaction',
           type: 'event',

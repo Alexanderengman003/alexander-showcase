@@ -86,7 +86,7 @@ const ActivityDetailsModal: React.FC<ActivityDetailsModalProps> = ({
                 </Badge>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Page:</span>
+                <span className="text-sm text-muted-foreground">Section:</span>
                 <span className="font-medium">{activity.page}</span>
               </div>
               <div className="flex items-center justify-between">
