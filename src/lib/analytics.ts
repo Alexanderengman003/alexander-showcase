@@ -121,7 +121,7 @@ const getOperatingSystem = (): string => {
   return 'Other';
 };
 
-// Infer referrer from document, UTM parameters, or in-app browser user agents
+// Infer referrer from document or UTM parameters (conservative)
 const inferReferrer = (): string | null => {
   try {
     if (document.referrer) return document.referrer;
@@ -149,15 +149,6 @@ const inferReferrer = (): string | null => {
       return map[source] || `https://${source}.com/`;
     }
   } catch {}
-
-  const ua = navigator.userAgent.toLowerCase();
-  if (ua.includes('linkedin')) return 'https://www.linkedin.com/';
-  if (ua.includes('instagram')) return 'https://www.instagram.com/';
-  if (ua.includes('fb') || ua.includes('facebook')) return 'https://www.facebook.com/';
-  if (ua.includes('twitter') || ua.includes('x/')) return 'https://twitter.com/';
-  if (ua.includes('reddit')) return 'https://www.reddit.com/';
-  if (ua.includes('whatsapp')) return 'https://www.whatsapp.com/';
-  if (ua.includes('tiktok')) return 'https://www.tiktok.com/';
 
   return null;
 };
@@ -279,6 +270,9 @@ export const getAnalyticsStats = async (days: number = 7) => {
     // Get ALL sessions (for recent activity - no time filter)
     const { data: allSessions, error: allSessionsError } = await supabase.from('analytics_sessions').select('*');
     if (allSessionsError) throw allSessionsError;
+
+    // Build quick lookup for session by id
+    const sessionMap = new Map((allSessions || []).map((s: any) => [s.session_id, s]));
 
     // Filter data for time-based statistics
     let pageViews = allPageViews;
@@ -462,7 +456,7 @@ export const getAnalyticsStats = async (days: number = 7) => {
           location: view.city && view.country ? `${view.city}, ${view.country}` : view.country || 'Unknown',
           type: 'page_view',
           data: {
-            referrer: view.referrer,
+            referrer: view.referrer || (sessionMap.get(view.session_id)?.referrer ?? null),
             userAgent: view.user_agent,
             device: view.device_type,
             browser: view.browser,

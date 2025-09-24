@@ -312,7 +312,6 @@ export const EventDetailsModal = ({ isOpen, onClose, eventType, eventDisplayName
                         <TableHead className="font-modern w-24">Location</TableHead>
                         <TableHead className="font-modern w-20">Device</TableHead>
                         <TableHead className="font-modern w-20">Browser</TableHead>
-                        <TableHead className="font-modern w-16">Page</TableHead>
                         <TableHead className="font-modern w-24">Section</TableHead>
                         <TableHead className="font-modern w-32">Item</TableHead>
                         <TableHead className="font-modern w-24">Referrer</TableHead>
@@ -348,11 +347,6 @@ export const EventDetailsModal = ({ isOpen, onClose, eventType, eventDisplayName
                           <TableCell>
                             <Badge variant="secondary" className="font-modern">
                               {event.session_data?.browser || 'Unknown'}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>
-                            <Badge variant="outline" className="font-modern">
-                              {event.page_path === '/' ? 'Home' : event.page_path || 'Unknown'}
                             </Badge>
                           </TableCell>
                           <TableCell className="font-modern text-sm">
