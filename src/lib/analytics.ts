@@ -209,11 +209,17 @@ export const getAnalyticsStats = async (days: number = 7) => {
     const bounceCount = sessions?.filter(session => session.page_views_count === 1).length || 0;
     const bounceRate = uniqueVisitors > 0 ? (bounceCount / uniqueVisitors) * 100 : 0;
 
-    // Calculate average session duration
-    const totalDuration = sessions?.reduce((sum, session) => {
-      const duration = new Date(session.last_activity_at).getTime() - new Date(session.first_visit_at).getTime();
-      return sum + Math.max(0, duration / 1000); // Convert to seconds
-    }, 0) || 0;
+    // Calculate average session duration - use duration_seconds field or calculate properly
+    const sessionsWithDuration = sessions?.filter(session => session.duration_seconds && session.duration_seconds > 0) || [];
+    const totalDuration = sessionsWithDuration.length > 0 
+      ? sessionsWithDuration.reduce((sum, session) => sum + session.duration_seconds, 0)
+      : sessions?.reduce((sum, session) => {
+          const duration = new Date(session.last_activity_at).getTime() - new Date(session.first_visit_at).getTime();
+          const durationSeconds = Math.max(0, duration / 1000);
+          // Cap session duration at 30 minutes to avoid outliers
+          return sum + Math.min(durationSeconds, 1800);
+        }, 0) || 0;
+    
     const avgSessionTime = uniqueVisitors > 0 ? Math.round(totalDuration / uniqueVisitors) : 0;
 
     // Top pages - normalize page names properly
