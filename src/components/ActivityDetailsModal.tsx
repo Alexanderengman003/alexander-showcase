@@ -110,6 +110,72 @@ const ActivityDetailsModal: React.FC<ActivityDetailsModalProps> = ({
                 <CardTitle className="font-modern text-lg">Additional Information</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
+                {activity.data.section && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground">Section:</span>
+                    <span className="font-medium">{activity.data.section}</span>
+                  </div>
+                )}
+                {activity.data.filter && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground">Filter Type:</span>
+                    <span className="font-medium">{activity.data.filter}</span>
+                  </div>
+                )}
+                {activity.data.value && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground">Value:</span>
+                    <span className="font-medium">{activity.data.value}</span>
+                  </div>
+                )}
+                {activity.data.type && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground">Click Type:</span>
+                    <span className="font-medium">{activity.data.type}</span>
+                  </div>
+                )}
+                {activity.data.item && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground">Item Clicked:</span>
+                    <span className="font-medium">{activity.data.item}</span>
+                  </div>
+                )}
+                {activity.data.url && (
+                  <div className="flex items-start justify-between">
+                    <span className="text-sm text-muted-foreground">URL:</span>
+                    <span className="font-medium text-right max-w-md break-all">{activity.data.url}</span>
+                  </div>
+                )}
+                {activity.data.position && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground">Position:</span>
+                    <span className="font-medium">{activity.data.position}</span>
+                  </div>
+                )}
+                {activity.data.project && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground">Project:</span>
+                    <span className="font-medium">{activity.data.project}</span>
+                  </div>
+                )}
+                {activity.data.degree && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground">Degree:</span>
+                    <span className="font-medium">{activity.data.degree}</span>
+                  </div>
+                )}
+                {activity.data.method && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground">Method:</span>
+                    <span className="font-medium">{activity.data.method}</span>
+                  </div>
+                )}
+                {activity.data.totalResults !== undefined && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground">Results Found:</span>
+                    <span className="font-medium">{activity.data.totalResults}</span>
+                  </div>
+                )}
                 {activity.data.referrer && (
                   <div className="flex items-start justify-between">
                     <span className="text-sm text-muted-foreground">Referrer:</span>

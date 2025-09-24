@@ -344,30 +344,51 @@ const Analytics = () => {
               </CardContent>
             </Card>
 
-            {/* Professional Filters Usage */}
+            {/* Filter Usage */}
             <Card className="card-gradient">
               <CardHeader>
                 <CardTitle className="font-modern">Filter Usage</CardTitle>
-                <CardDescription className="font-modern">Most applied professional experience filters</CardDescription>
+                <CardDescription className="font-modern">Most applied filters across all sections</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="h-[200px] overflow-y-auto">
                   <div className="space-y-4">
                     {stats.filterUsage && stats.filterUsage.length > 0 ? (
-                      stats.filterUsage.slice(0, 10).map((filterItem: any) => (
-                        <div key={filterItem.filter} className="flex items-center justify-between">
-                          <div className="flex items-center space-x-3">
-                            {filterItem.filter.startsWith("Area:") && <Settings className="h-4 w-4 text-muted-foreground" />}
-                            {filterItem.filter.startsWith("Skill:") && <Filter className="h-4 w-4 text-muted-foreground" />}
-                            {filterItem.filter.startsWith("Software:") && <Monitor className="h-4 w-4 text-muted-foreground" />}
-                            <span className="font-medium font-modern text-sm">{filterItem.filter}</span>
+                      stats.filterUsage.slice(0, 10).map((filterItem: any) => {
+                        // Parse the filter format: "Section: filter = value"
+                        const [section, filterPart] = filterItem.filter.split(': ');
+                        const [filterType, value] = filterPart ? filterPart.split(' = ') : ['', ''];
+                        
+                        // Get appropriate icon based on filter type
+                        const getFilterIcon = () => {
+                          if (filterType === 'area') return <Settings className="h-4 w-4 text-muted-foreground" />;
+                          if (filterType === 'technology') return <Filter className="h-4 w-4 text-muted-foreground" />;
+                          if (filterType === 'software') return <Monitor className="h-4 w-4 text-muted-foreground" />;
+                          if (filterType === 'category') return <Filter className="h-4 w-4 text-muted-foreground" />;
+                          if (filterType === 'view_mode') return <Eye className="h-4 w-4 text-muted-foreground" />;
+                          return <Filter className="h-4 w-4 text-muted-foreground" />;
+                        };
+                        
+                        return (
+                          <div key={filterItem.filter} className="flex items-start justify-between">
+                            <div className="flex items-start space-x-3 flex-1 min-w-0">
+                              {getFilterIcon()}
+                              <div className="flex-1 min-w-0">
+                                <div className="font-medium font-modern text-sm truncate">
+                                  {section}
+                                </div>
+                                <div className="text-xs text-muted-foreground">
+                                  {filterType}: <span className="font-medium">{value}</span>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="text-right flex-shrink-0 ml-2">
+                              <div className="font-semibold font-modern text-sm">{filterItem.count}</div>
+                              <div className="text-xs text-muted-foreground">{filterItem.percentage}%</div>
+                            </div>
                           </div>
-                          <div className="text-right">
-                            <div className="font-semibold font-modern text-sm">{filterItem.count}</div>
-                            <div className="text-xs text-muted-foreground">{filterItem.percentage}%</div>
-                          </div>
-                        </div>
-                      ))
+                        );
+                      })
                     ) : (
                       <div className="text-center py-4 text-muted-foreground">
                         <Filter className="h-6 w-6 mx-auto mb-2 opacity-50" />
