@@ -493,6 +493,78 @@ const Analytics = () => {
               </CardContent>
             </Card>
 
+            {/* Filter Statistics */}
+            <Card className="card-gradient">
+              <CardHeader>
+                <CardTitle className="font-modern">Filter Statistics</CardTitle>
+                <CardDescription className="font-modern">Top 5 most used filters</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-[200px] overflow-y-auto pr-4">
+                  <div className="space-y-4">
+                    {stats.topFilterStats && stats.topFilterStats.length > 0 ? (
+                      stats.topFilterStats.map((filterStat: any, index: number) => (
+                        <div key={filterStat.filter} className="flex items-center justify-between pr-2">
+                          <div className="flex items-center space-x-3 flex-1 min-w-0">
+                            <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                              <span className="text-xs font-semibold text-primary">{index + 1}</span>
+                            </div>
+                            <Filter className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                            <span className="font-medium font-modern text-sm truncate">{filterStat.filter}</span>
+                          </div>
+                          <div className="text-right flex-shrink-0 ml-2">
+                            <div className="font-semibold font-modern text-sm">{filterStat.count}</div>
+                            <div className="text-xs text-muted-foreground">{filterStat.percentage}%</div>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="text-center py-4 text-muted-foreground">
+                        <Filter className="h-6 w-6 mx-auto mb-2 opacity-50" />
+                        <p className="text-xs">No filter data yet</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Click Statistics */}
+            <Card className="card-gradient">
+              <CardHeader>
+                <CardTitle className="font-modern">Click Statistics</CardTitle>
+                <CardDescription className="font-modern">Top 5 most clicked items</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-[200px] overflow-y-auto pr-4">
+                  <div className="space-y-4">
+                    {stats.topClickStats && stats.topClickStats.length > 0 ? (
+                      stats.topClickStats.map((clickStat: any, index: number) => (
+                        <div key={clickStat.click} className="flex items-center justify-between pr-2">
+                          <div className="flex items-center space-x-3 flex-1 min-w-0">
+                            <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                              <span className="text-xs font-semibold text-primary">{index + 1}</span>
+                            </div>
+                            <MousePointer className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                            <span className="font-medium font-modern text-sm truncate">{clickStat.click}</span>
+                          </div>
+                          <div className="text-right flex-shrink-0 ml-2">
+                            <div className="font-semibold font-modern text-sm">{clickStat.count}</div>
+                            <div className="text-xs text-muted-foreground">{clickStat.percentage}%</div>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="text-center py-4 text-muted-foreground">
+                        <MousePointer className="h-6 w-6 mx-auto mb-2 opacity-50" />
+                        <p className="text-xs">No click data yet</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
             {/* Recent Activity */}
             <Card className="card-gradient">
               <CardHeader>

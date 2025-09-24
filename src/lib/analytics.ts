@@ -301,13 +301,13 @@ export const getAnalyticsStats = async (days: number = 7) => {
       .sort((a, b) => b.count - a.count);
 
     // Filter tracking stats for all sections - updated for new event structure
-    const filterEvents = events?.filter(event => event.event_type === 'Filter') || [];
-    const clickEvents = events?.filter(event => event.event_type === 'Click') || [];
+    const filterEvents = events?.filter(event => event.event_type === 'Filter applied') || [];
+    const clickEvents = events?.filter(event => event.event_type === 'Link click') || [];
 
     const filterStats = filterEvents.reduce((acc: any, event) => {
       const eventData = event.event_data as any;
-      if (eventData && eventData.section && eventData.item) {
-        const key = `${eventData.section}: ${eventData.item}`;
+      if (eventData && eventData.section && eventData.filter) {
+        const key = `${eventData.section}: ${eventData.filter} = ${eventData.value || 'N/A'}`;
         acc[key] = (acc[key] || 0) + 1;
       }
       return acc;
@@ -321,6 +321,28 @@ export const getAnalyticsStats = async (days: number = 7) => {
       }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 6);
+
+    // Click statistics
+    const clickStats = clickEvents.reduce((acc: any, event) => {
+      const eventData = event.event_data as any;
+      if (eventData && eventData.section && eventData.item) {
+        const key = `${eventData.section}: ${eventData.item}`;
+        acc[key] = (acc[key] || 0) + 1;
+      }
+      return acc;
+    }, {});
+
+    const topClickStats = Object.entries(clickStats)
+      .map(([click, count]) => ({
+        click,
+        count: count as number,
+        percentage: clickEvents.length > 0 ? (((count as number) / clickEvents.length) * 100).toFixed(1) : '0'
+      }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 5);
+
+    // Top filter statistics (top 5)
+    const topFilterStats = filterUsage.slice(0, 5);
 
     // Daily traffic data for charts - ensure all days in range are included
     const dailyTraffic = pageViews?.reduce((acc: any, view) => {
@@ -469,6 +491,8 @@ export const getAnalyticsStats = async (days: number = 7) => {
       topPages,
       deviceTypes,
       filterUsage,
+      topFilterStats,
+      topClickStats,
       trafficData,
       recentActivity: combinedActivity,
       allCountries,
