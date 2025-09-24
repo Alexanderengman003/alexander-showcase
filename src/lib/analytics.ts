@@ -253,6 +253,7 @@ export const trackEvent = async (eventType: string, eventData?: any, pagePath?: 
 // Analytics data fetching functions
 // Get referrer statistics (first visit per session only)
 export const getReferrerStats = async (days: number = 7) => {
+  console.log('getReferrerStats called with days:', days);
   try {
     // First get all sessions
     let sessionsQuery = supabase
@@ -264,12 +265,16 @@ export const getReferrerStats = async (days: number = 7) => {
       const startDate = new Date();
       startDate.setDate(startDate.getDate() - days);
       sessionsQuery = sessionsQuery.gte('first_visit_at', startDate.toISOString());
+      console.log('Filtering sessions from:', startDate.toISOString());
     }
 
     const { data: sessions, error: sessionsError } = await sessionsQuery;
     if (sessionsError) throw sessionsError;
 
+    console.log('Raw sessions data:', sessions);
+
     if (!sessions || sessions.length === 0) {
+      console.log('No sessions found');
       return {
         totalSessions: 0,
         directPercentage: 0,
@@ -337,6 +342,9 @@ export const getReferrerStats = async (days: number = 7) => {
         ...group,
         percentage: Math.round((group.count / totalSessions) * 100)
       }));
+
+    console.log('Processed referrer counts:', referrerCounts);
+    console.log('Total sessions:', totalSessions);
 
     return {
       totalSessions,
@@ -612,6 +620,7 @@ export const getAnalyticsStats = async (days: number = 7) => {
           location: 'User Interaction',
           type: 'event',
           data: {
+            referrer: sessionMap.get(event.session_id)?.referrer || null,
             ...(event.event_data && typeof event.event_data === 'object' ? event.event_data : {}),
             sessionId: event.session_id,
             eventType: event.event_type,

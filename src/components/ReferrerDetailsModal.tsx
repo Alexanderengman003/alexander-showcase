@@ -30,9 +30,13 @@ export const ReferrerDetailsModal = ({ isOpen, onClose, timeRange }: ReferrerDet
   const fetchReferrerData = async () => {
     setLoading(true);
     try {
+      const [referrerData, setReferrerData] = useState<any>(null);
       const selectedRange = timeRanges.find(range => range.value === timeRange);
       const days = selectedRange?.days || 7;
+      
+      console.log('Fetching referrer data for days:', days);
       const data = await getReferrerStats(days);
+      console.log('Referrer data result:', data);
       setReferrerData(data);
     } catch (error) {
       console.error('Error fetching referrer data:', error);

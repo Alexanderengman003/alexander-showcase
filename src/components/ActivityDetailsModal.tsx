@@ -170,6 +170,23 @@ const ActivityDetailsModal: React.FC<ActivityDetailsModalProps> = ({
                     <span className="font-medium">{activity.data.totalResults}</span>
                   </div>
                 )}
+                {activity.data.referrer && (
+                  <div className="flex items-start justify-between">
+                    <span className="text-sm text-muted-foreground">Referrer:</span>
+                    <span className="font-medium text-right max-w-md break-all">
+                      {activity.data.referrer === 'Direct' ? 'Direct' : (
+                        <a
+                          href={activity.data.referrer}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hover:text-primary underline-offset-4 hover:underline"
+                        >
+                          {activity.data.referrer}
+                        </a>
+                      )}
+                    </span>
+                  </div>
+                )}
                 {activity.data.pageTitle && (
                   <div className="flex items-start justify-between">
                     <span className="text-sm text-muted-foreground">Page Title:</span>

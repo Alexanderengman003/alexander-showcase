@@ -74,8 +74,13 @@ const Analytics = () => {
   const fetchAnalytics = async (days: number) => {
     setLoading(true);
     try {
-      const data = await getAnalyticsStats(days);
-      const referrerData = await getReferrerStats(days);
+      console.log('Fetching analytics for days:', days);
+      const [data, referrerData] = await Promise.all([
+        getAnalyticsStats(days),
+        getReferrerStats(days)
+      ]);
+      console.log('Analytics data:', data);
+      console.log('Referrer data:', referrerData);
       setStats(data);
       setReferrerStats(referrerData);
     } catch (error) {
@@ -311,9 +316,8 @@ const Analytics = () => {
                       <p className="text-xs mt-1">Button clicks and interactions will appear here</p>
                     </div>
                   )}
-                  
                   {/* Traffic Sources Card */}
-                  {referrerStats && (
+                  {referrerStats && referrerStats.totalSessions > 0 && (
                     <div 
                       className="text-center p-4 rounded-lg bg-card border border-border/50 transition-all duration-200 hover:border-primary hover:shadow-md hover:scale-105 cursor-pointer"
                       onClick={handleReferrerClick}
