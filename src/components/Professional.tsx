@@ -224,7 +224,7 @@ export function Professional() {
             Professional Experience
           </h2>
           <p className="mt-4 text-lg leading-8 text-muted-foreground">
-            A journey through my professional career in semiconductor engineering and technology development.
+            A journey through my professional career in hardware engineering and technology development.
           </p>
         </div>
 
