@@ -316,7 +316,6 @@ export const EventDetailsModal = ({ isOpen, onClose, eventType, eventDisplayName
                         <TableHead className="font-modern w-24">Section</TableHead>
                         <TableHead className="font-modern w-32">Item</TableHead>
                         <TableHead className="font-modern w-20">Type</TableHead>
-                        <TableHead className="font-modern w-32">URL/Value</TableHead>
                         <TableHead className="font-modern w-24">Referrer</TableHead>
                       </TableRow>
                     </TableHeader>
@@ -365,9 +364,6 @@ export const EventDetailsModal = ({ isOpen, onClose, eventType, eventDisplayName
                           </TableCell>
                           <TableCell className="font-modern text-sm">
                             {event.event_data?.type || 'N/A'}
-                          </TableCell>
-                          <TableCell className="font-modern text-sm">
-                            {event.event_data?.url || event.event_data?.value || 'N/A'}
                           </TableCell>
                           <TableCell className="font-modern text-sm text-muted-foreground">
                             {event.session_data?.referrer ? (
