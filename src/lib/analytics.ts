@@ -352,10 +352,10 @@ export const getAnalyticsStats = async (days: number = 7) => {
         percentage: allClickEvents.length > 0 ? (((count as number) / allClickEvents.length) * 100).toFixed(1) : '0'
       }))
       .sort((a, b) => b.count - a.count)
-      .slice(0, 5);
+      .slice(0, 10);
 
-    // Top filter statistics (top 5)
-    const topFilterStats = filterUsage.slice(0, 5);
+    // Top filter statistics (top 10)
+    const topFilterStats = filterUsage.slice(0, 10);
 
     // Daily traffic data for charts - ensure all days in range are included
     const dailyTraffic = pageViews?.reduce((acc: any, view) => {

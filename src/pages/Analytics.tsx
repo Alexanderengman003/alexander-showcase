@@ -312,7 +312,7 @@ const Analytics = () => {
             <Card className="card-gradient">
               <CardHeader>
                 <CardTitle className="font-modern">Filter Statistics</CardTitle>
-                <CardDescription className="font-modern">Top 5 most used filters</CardDescription>
+                <CardDescription className="font-modern">Top 10 most used filters</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="h-[200px] overflow-y-auto pr-4">
@@ -348,7 +348,7 @@ const Analytics = () => {
             <Card className="card-gradient">
               <CardHeader>
                 <CardTitle className="font-modern">Click Statistics</CardTitle>
-                <CardDescription className="font-modern">Top 5 most clicked items</CardDescription>
+                <CardDescription className="font-modern">Top 10 most clicked items</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="h-[200px] overflow-y-auto pr-4">
