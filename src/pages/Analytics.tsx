@@ -483,17 +483,17 @@ const Analytics = () => {
                 <CardDescription className="font-modern">Most popular sections</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="h-[200px] overflow-y-auto">
+                <div className="h-[200px] overflow-y-auto pr-4">
                   <div className="space-y-4">
                     {stats.topSections.slice(0, 10).map((section: any, index: number) => (
-                      <div key={section.section} className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-semibold">
+                      <div key={section.section} className="flex items-center justify-between pr-2">
+                        <div className="flex items-center space-x-3 flex-1 min-w-0">
+                          <div className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-semibold flex-shrink-0">
                             {index + 1}
                           </div>
-                          <span className="font-medium font-modern text-sm">{section.section}</span>
+                          <span className="font-medium font-modern text-sm truncate">{section.section}</span>
                         </div>
-                        <div className="text-right">
+                        <div className="text-right flex-shrink-0 ml-2">
                           <div className="font-semibold font-modern text-sm">{section.count}</div>
                           <div className="text-xs text-muted-foreground">{section.percentage}%</div>
                         </div>
