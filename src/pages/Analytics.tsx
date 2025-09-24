@@ -323,18 +323,13 @@ const Analytics = () => {
                           const [filterType, value] = part ? part.split(' = ') : ['', ''];
                           return (
                             <div key={filterStat.filter} className="flex items-center justify-between pr-2">
-                              <div className="flex items-start space-x-3 flex-1 min-w-0">
+                              <div className="flex items-center space-x-3 flex-1 min-w-0">
                                 <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                                   <span className="text-xs font-semibold text-primary">{index + 1}</span>
                                 </div>
-                                <div className="flex-1 min-w-0">
-                                  <div className="font-medium font-modern text-sm truncate">{section}</div>
-                                  <div className="mt-1 flex flex-wrap gap-1">
-                                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-muted text-muted-foreground">{filterType}</span>
-                                    {value && (
-                                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary">{value}</span>
-                                    )}
-                                  </div>
+                                <div className="flex items-center gap-2 flex-1 min-w-0">
+                                  <span className="font-medium font-modern text-sm truncate">{value || filterType}</span>
+                                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary flex-shrink-0">{section}</span>
                                 </div>
                               </div>
                               <div className="text-right flex-shrink-0 ml-2">
@@ -365,21 +360,34 @@ const Analytics = () => {
                 <div className="h-[200px] overflow-y-auto pr-4">
                   <div className="space-y-4">
                     {stats.topClickStats && stats.topClickStats.length > 0 ? (
-                      stats.topClickStats.map((clickStat: any, index: number) => (
-                        <div key={clickStat.click} className="flex items-center justify-between pr-2">
-                          <div className="flex items-center space-x-3 flex-1 min-w-0">
-                            <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                              <span className="text-xs font-semibold text-primary">{index + 1}</span>
+                      stats.topClickStats.map((clickStat: any, index: number) => {
+                        // Extract section from click data - assuming format like "hero:Download CV" or just "Download CV"
+                        const [possibleSection, clickAction] = clickStat.click.includes(':') 
+                          ? clickStat.click.split(':')
+                          : ['', clickStat.click];
+                        const section = possibleSection || 'Unknown';
+                        const action = clickAction || clickStat.click;
+                        
+                        return (
+                          <div key={clickStat.click} className="flex items-center justify-between pr-2">
+                            <div className="flex items-center space-x-3 flex-1 min-w-0">
+                              <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                                <span className="text-xs font-semibold text-primary">{index + 1}</span>
+                              </div>
+                              <div className="flex items-center gap-2 flex-1 min-w-0">
+                                <span className="font-medium font-modern text-sm truncate">{action}</span>
+                                {possibleSection && (
+                                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary flex-shrink-0">{section}</span>
+                                )}
+                              </div>
                             </div>
-                            <MousePointer className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                            <span className="font-medium font-modern text-sm truncate">{clickStat.click}</span>
+                            <div className="text-right flex-shrink-0 ml-2">
+                              <div className="font-semibold font-modern text-sm">{clickStat.count}</div>
+                              <div className="text-xs text-muted-foreground">{clickStat.percentage}%</div>
+                            </div>
                           </div>
-                          <div className="text-right flex-shrink-0 ml-2">
-                            <div className="font-semibold font-modern text-sm">{clickStat.count}</div>
-                            <div className="text-xs text-muted-foreground">{clickStat.percentage}%</div>
-                          </div>
-                        </div>
-                      ))
+                        );
+                      })
                     ) : (
                       <div className="text-center py-4 text-muted-foreground">
                         <MousePointer className="h-6 w-6 mx-auto mb-2 opacity-50" />
