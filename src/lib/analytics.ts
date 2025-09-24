@@ -322,8 +322,12 @@ export const getAnalyticsStats = async (days: number = 7) => {
       .sort((a, b) => b.count - a.count)
       .slice(0, 6);
 
-    // Click statistics
-    const clickStats = clickEvents.reduce((acc: any, event) => {
+    // Click statistics - combine both Click and Link click events
+    const allClickEvents = events?.filter(event => 
+      event.event_type === 'Link click' || event.event_type === 'Click'
+    ) || [];
+    
+    const clickStats = allClickEvents.reduce((acc: any, event) => {
       const eventData = event.event_data as any;
       if (eventData && eventData.section && eventData.item) {
         const key = `${eventData.section}: ${eventData.item}`;
@@ -336,7 +340,7 @@ export const getAnalyticsStats = async (days: number = 7) => {
       .map(([click, count]) => ({
         click,
         count: count as number,
-        percentage: clickEvents.length > 0 ? (((count as number) / clickEvents.length) * 100).toFixed(1) : '0'
+        percentage: allClickEvents.length > 0 ? (((count as number) / allClickEvents.length) * 100).toFixed(1) : '0'
       }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 5);
@@ -436,9 +440,13 @@ export const getAnalyticsStats = async (days: number = 7) => {
     const combinedActivity = [...recentPageViews, ...recentEvents]
       .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 
-    // Event statistics
+    // Event statistics - combine Click and Link click into one category
     const eventStats = events?.reduce((acc: any, event) => {
-      const eventType = event.event_type;
+      let eventType = event.event_type;
+      // Normalize event types - combine Link click and Click into just Click
+      if (eventType === 'Link click') {
+        eventType = 'Click';
+      }
       acc[eventType] = (acc[eventType] || 0) + 1;
       return acc;
     }, {}) || {};
