@@ -36,9 +36,9 @@ serve(async (req) => {
       )
     }
 
-    // Try to get geolocation data
+    // Try to get geolocation data (using HTTP for free tier)
     try {
-      const response = await fetch(`https://ip-api.com/json/${clientIp}?fields=status,message,country,city,query`)
+      const response = await fetch(`http://ip-api.com/json/${clientIp}?fields=status,message,country,city,query`)
       const data = await response.json()
 
       if (data.status === 'success') {
