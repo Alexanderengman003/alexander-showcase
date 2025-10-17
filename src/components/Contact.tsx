@@ -237,19 +237,6 @@ export function Contact() {
               </div>
 
               <div>
-                <Label htmlFor="phone">Phone (optional)</Label>
-                <Input
-                  id="phone"
-                  name="phone"
-                  type="tel"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  className="mt-2"
-                  placeholder="+46 (0) 701234567"
-                />
-              </div>
-
-              <div>
                 <Label htmlFor="subject">Subject</Label>
                 <Input
                   id="subject"
