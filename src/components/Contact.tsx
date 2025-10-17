@@ -17,12 +17,6 @@ const contactInfo = [
     href: "mailto:alexander@engman.nu",
   },
   {
-    icon: Phone,
-    label: "Phone",
-    value: "+46 73 322 43 78",
-    href: "tel:+46733224378",
-  },
-  {
     icon: MapPin,
     label: "Location",
     value: "Stockholm, Sweden",
