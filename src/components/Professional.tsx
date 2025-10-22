@@ -38,7 +38,7 @@ const professionalRoles = [
     company: "Aplexor AB",
     location: "Stockholm, SWEDEN",
     period: "January 2025 – Currently ongoing",
-    description: "Consultant offering sales and business development services to SMEs in physical technologies, who want to expand in Sweden or enter the Swedish markets.",
+    description: "Consultant offering sales and business development services to SMEs in physical technologies, who want to expand in Sweden.",
     technologies: ["Medical Technology", "Electronics", "Customer Relations", "Sales"],
     software: ["Salesforce"],
     achievements: [
