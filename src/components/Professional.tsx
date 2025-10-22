@@ -13,6 +13,7 @@ import ascilionLogo from "@/assets/ascilion-logo.png";
 import brightDayGrapheneLogo from "@/assets/bright-day-graphene-logo.png";
 import exegerLogo from "@/assets/exeger-logo.png";
 import ebvLogo from "@/assets/ebv-logo.png";
+import aplexorLogo from "@/assets/aplexor-logo.png";
 
 const professionalRoles = [
   {
@@ -33,6 +34,22 @@ const professionalRoles = [
   },
   {
     id: 2,
+    title: "Sales Consultant",
+    company: "Aplexor AB",
+    location: "Stockholm, SWEDEN",
+    period: "January 2025 – Currently ongoing",
+    description: "Consultant offering sales and business development services to SMEs in physical technologies, who want to expand in Sweden or enter the Swedish markets.",
+    technologies: ["Medical Technology", "Electronics", "Customer Relations", "Sales"],
+    software: ["Salesforce"],
+    achievements: [
+      "Built strategic partnerships and network",
+      "Built custom made CRM tailored for SMEs",
+      "Created value to customers by offering sales support"
+    ],
+    area: "Sales"
+  },
+  {
+    id: 3,
     title: "Application Engineer",
     company: "Exeger Operations AB",
     location: "Stockholm, SWEDEN",
@@ -48,7 +65,7 @@ const professionalRoles = [
     area: "Engineering,Sales"
   },
   {
-    id: 3,
+    id: 4,
     title: "Application Specialist",
     company: "Ascilion AB",
     location: "Stockholm, SWEDEN",
@@ -64,7 +81,7 @@ const professionalRoles = [
     area: "Engineering,Sales"
   },
   {
-    id: 4,
+    id: 5,
     title: "Development Engineer",
     company: "Ascilion AB",
     location: "Stockholm, SWEDEN",
@@ -80,7 +97,7 @@ const professionalRoles = [
     area: "Engineering"
   },
   {
-    id: 5,
+    id: 6,
     title: "Process Engineer",
     company: "Bright Day Graphene AB",
     location: "Stockholm, SWEDEN",
@@ -586,6 +603,28 @@ export function Professional() {
                               <img 
                                 src={brightDayGrapheneLogo} 
                                 alt="Bright Day Graphene" 
+                                className="h-5 w-5 rounded-sm"
+                              />
+                            </a>
+                          )}
+                          {role.company === "Aplexor AB" && (
+                            <a 
+                              href="https://www.aplexor.com"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={() => track("Click", {
+                                type: 'company_logo',
+                                section: "Professional Experience",
+                                action: 'company_logo_click',
+                                item: "Aplexor AB",
+                                position: "Sales Consultant",
+                                url: "https://www.aplexor.com"
+                              })}
+                              className="hover:opacity-80 transition-opacity"
+                            >
+                              <img 
+                                src={aplexorLogo} 
+                                alt="Aplexor" 
                                 className="h-5 w-5 rounded-sm"
                               />
                             </a>
