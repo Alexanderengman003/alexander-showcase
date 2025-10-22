@@ -662,6 +662,7 @@ export function Professional() {
                               role.company === "Ascilion AB" ? "https://www.ascilion.com/" :
                               role.company === "Bright Day Graphene AB" ? "https://www.brightdaygraphene.se/" :
                               role.company === "Exeger Operations AB" ? "https://www.exeger.com/" :
+                              role.company === "Aplexor AB" ? "https://www.aplexor.com/" :
                               "#"
                             }
                             target="_blank"
@@ -675,7 +676,8 @@ export function Professional() {
                               url: role.company === "EBV Elektronik" ? "https://my.avnet.com/ebv/" :
                                    role.company === "Ascilion AB" ? "https://www.ascilion.com/" :
                                    role.company === "Bright Day Graphene AB" ? "https://www.brightdaygraphene.se/" :
-                                   role.company === "Exeger Operations AB" ? "https://www.exeger.com/" : "#"
+                                   role.company === "Exeger Operations AB" ? "https://www.exeger.com/" :
+                                   role.company === "Aplexor AB" ? "https://www.aplexor.com/" : "#"
                             })}
                             className="text-sm font-medium hover:text-primary transition-colors cursor-pointer inline-flex items-center gap-1"
                           >
@@ -850,6 +852,7 @@ export function Professional() {
                             role.company === "Ascilion AB" ? "https://www.ascilion.com/" :
                             role.company === "Bright Day Graphene AB" ? "https://www.brightdaygraphene.se/" :
                             role.company === "Exeger Operations AB" ? "https://www.exeger.com/" :
+                            role.company === "Aplexor AB" ? "https://www.aplexor.com/" :
                             "#"
                           }
                           target="_blank"
@@ -863,7 +866,8 @@ export function Professional() {
                             url: role.company === "EBV Elektronik" ? "https://my.avnet.com/ebv/" :
                                  role.company === "Ascilion AB" ? "https://www.ascilion.com/" :
                                  role.company === "Bright Day Graphene AB" ? "https://www.brightdaygraphene.se/" :
-                                 role.company === "Exeger Operations AB" ? "https://www.exeger.com/" : "#"
+                                 role.company === "Exeger Operations AB" ? "https://www.exeger.com/" :
+                                 role.company === "Aplexor AB" ? "https://www.aplexor.com/" : "#"
                           })}
                           className="text-sm font-medium hover:text-primary transition-colors cursor-pointer inline-flex items-center gap-1"
                         >
