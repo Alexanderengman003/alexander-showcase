@@ -1,4 +1,4 @@
-aimport { Code, Cpu, Heart, Users, TrendingUp, DollarSign } from "lucide-react";
+import { Code, Cpu, Heart, Users, TrendingUp, DollarSign } from "lucide-react";
 
 const features = [
   {
