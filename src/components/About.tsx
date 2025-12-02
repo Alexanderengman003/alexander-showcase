@@ -1,16 +1,6 @@
-import { Code, Cpu, Heart, Users, TrendingUp, DollarSign } from "lucide-react";
+aimport { Code, Cpu, Heart, Users, TrendingUp, DollarSign } from "lucide-react";
 
 const features = [
-  {
-    icon: Cpu,
-    title: "Semiconductors",
-    description: "Experience in MEMS, CMOS design, semiconductor physics, and cleanroom fabrication processes."
-  },
-  {
-    icon: Heart,
-    title: "Medical technology",
-    description: "Developing medical devices from concept to market, ensuring ISO 13485 and MDR compliance."
-  },
   {
     icon: Users,
     title: "Project management",
@@ -22,15 +12,25 @@ const features = [
     description: "Engaging with customers, forging strategic partnerships, and expanding market reach for growth."
   },
   {
+    icon: DollarSign,
+    title: "Sales",
+    description: "Building customer relationships, identifying market opportunities, and driving revenue through strategic sales initiatives."
+  },
+    {
     icon: Code,
     title: "Software development",
     description: "Programming experience in multiple languages for standalone projects and hardware interfacing."
   },
+    {
+    icon: Cpu,
+    title: "Semiconductors",
+    description: "Experience in MEMS, CMOS design, semiconductor physics, and cleanroom fabrication processes."
+  },
   {
-    icon: DollarSign,
-    title: "Sales",
-    description: "Building customer relationships, identifying market opportunities, and driving revenue through strategic sales initiatives."
-  }
+    icon: Heart,
+    title: "Medical technology",
+    description: "Developing medical devices from concept to market, ensuring ISO 13485 and MDR compliance."
+  },
 ];
 
 export function About() {
@@ -43,7 +43,7 @@ export function About() {
             <div className="card-gradient rounded-2xl p-5 shadow-medium hover-lift">
               <h3 className="text-xl font-semibold text-foreground mb-4">My Journey</h3>
               <p className="text-muted-foreground leading-relaxed text-justify">
-                Throughout my career, semiconductors have been the red thread, from research and product development to practical applications in advanced hardware. Over time, I have transitioned into a business-oriented and customer-facing role, leveraging my technical expertise to drive growth in sales, connect technology with customer needs, and contribute to advancing semiconductor innovation.
+                Throughout my career, semiconductors have been the red thread, from research and product development to practical applications in advanced hardware. Over time, I have transitioned into a business-oriented and customer-facing role, leveraging my technical expertise to drive growth in sales, connect technology with customer needs, and contribute to advancing hardware innovation.
               </p>
             </div>
           </div>
