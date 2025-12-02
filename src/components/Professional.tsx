@@ -42,9 +42,9 @@ const professionalRoles = [
     technologies: ["Medical Technology", "Electronics", "Customer Relations", "Sales"],
     software: ["Salesforce"],
     achievements: [
-      "Built strategic partnerships and network",
+      "Building network and doing outreach to engage with potential partners",
       "Built custom made CRM tailored for SMEs",
-      "Created value to customers by offering sales support"
+      "Provided consultation to analyze growth opportunities"
     ],
     area: "Sales"
   },
