@@ -25,7 +25,7 @@ export function Hero() {
             <div className="relative">
               <img
                 src="/lovable-uploads/fc819219-43d3-4817-b8da-08b472acd701.png"
-                alt="Alexander Engman - Hardware Engineer and Technical Sales Professional in Stockholm, Sweden"
+                alt="Alexander Engman - Engineer and Technical Sales Professional in Stockholm, Sweden"
                 className="w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96 rounded-full object-cover shadow-2xl ring-4 ring-white/10 group-hover:scale-105 transition-all duration-500"
               />
               <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-transparent to-primary/10 group-hover:to-primary/20 transition-all duration-500" />
@@ -43,7 +43,7 @@ export function Hero() {
               
                 <div className="relative space-y-2">
                   <h2 className="text-lg sm:text-xl lg:text-2xl font-medium text-muted-foreground">
-                    Hardware Engineering | Technical Sales
+                    Engineering | Technical Sales
                   </h2>
                   <div className="flex items-center gap-2 text-lg text-muted-foreground">
                     <MapPin className="h-5 w-5" />
@@ -57,7 +57,7 @@ export function Hero() {
             {/* Description */}
             <div className="animate-fade-up mb-6" style={{ animationDelay: "0.4s" }}>
               <p className="text-lg leading-relaxed text-muted-foreground max-w-2xl">
-                Passionate about advancing hardware technology, with hands-on experience in hardware development and innovation. Specialized in semiconductors, I have worked across design and development of hardware solutions, as well as sales and account management. With a background in engineering, I specialize in bridging technical expertise and customer needs to drive business growth.
+                Passionate about advancing technology, with hands-on experience in development and innovation. Specialized in semiconductors, I have worked across design and development of engineering solutions, as well as sales and account management. With a background in engineering, I specialize in bridging technical expertise and customer needs to drive business growth.
               </p>
             </div>
 
