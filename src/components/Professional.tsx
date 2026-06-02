@@ -38,7 +38,7 @@ const professionalRoles = [
     title: "Technical Account Manager",
     company: "EBV Elektronik",
     location: "Stockholm, SWEDEN",
-    period: "June 2025 – Currently ongoing",
+    period: "June 2025 – June 2026",
     description: "Account manager within semiconductors and electronic components providing technical support for new and existing customers.",
     technologies: ["Electronic Components", "Customer Relations", "Technical Support", "Sales"],
     software: ["Salesforce", "SAP", "PowerBI"],
@@ -54,7 +54,7 @@ const professionalRoles = [
     title: "Sales Consultant",
     company: "Aplexor AB",
     location: "Stockholm, SWEDEN",
-    period: "January 2025 – Currently ongoing",
+    period: "January 2025 – Current",
     description: "Consultant offering sales and business development services to SMEs in physical technologies, who want to expand in Sweden.",
     technologies: ["Medical Technology", "Electronics", "Customer Relations", "Sales"],
     software: ["Salesforce"],
@@ -818,6 +818,28 @@ export function Professional() {
                             />
                           </a>
                         )}
+                          {role.company === "Aplexor AB" && (
+                            <a 
+                              href="https://www.aplexor.com"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={() => track("Click", {
+                                type: 'company_logo',
+                                section: "Professional Experience",
+                                action: 'company_logo_click',
+                                item: "Aplexor AB",
+                                position: "Sales Consultant",
+                                url: "https://www.aplexor.com"
+                              })}
+                              className="hover:opacity-80 transition-opacity"
+                            >
+                              <img 
+                                src={aplexorLogo} 
+                                alt="Aplexor" 
+                                className="h-5 w-5 rounded-sm"
+                              />
+                            </a>
+                          )}
                         {role.company === "EBV Elektronik" && (
                           <a 
                             href="https://my.avnet.com/ebv/"
