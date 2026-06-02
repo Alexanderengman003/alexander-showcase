@@ -14,10 +14,27 @@ import brightDayGrapheneLogo from "@/assets/bright-day-graphene-logo.png";
 import exegerLogo from "@/assets/exeger-logo.png";
 import ebvLogo from "@/assets/ebv-logo.png";
 import aplexorLogo from "@/assets/aplexor-logo.png";
+import aplexorLogo from "@/assets/ansys-logo.png";
 
 const professionalRoles = [
-  {
+    {
     id: 1,
+    title: "Sales Account Representative, Sr Associate",
+    company: "Ansys part of Synopsys",
+    location: "Stockholm, SWEDEN",
+    period: "June 2026 – Current",
+    description: "Sales Account Representative within the high-tech segment at Synopsys, working with customers to support their projects and product development through advanced simulation solutions from Ansys (part of Synopsys).",
+    technologies: ["Multiphysics Simulation", "Customer Relations", "Account Management", "Sales"],
+    software: ["Salesforce", "SAP", "PowerBI"],
+    achievements: [
+      "Sales Account Representative within the high-tech segment, leveraging experience in advanced semiconductors",
+      "Supporting and advising new and existing customers on the use of Ansys solutions",
+      "Engagement within assigned sectors to expand adoption of engineering and physics simulation solutions"
+    ],
+    area: "Sales"
+  },
+  {
+    id: 2,
     title: "Technical Account Manager",
     company: "EBV Elektronik",
     location: "Stockholm, SWEDEN",
@@ -33,7 +50,7 @@ const professionalRoles = [
     area: "Sales"
   },
   {
-    id: 2,
+    id: 3,
     title: "Sales Consultant",
     company: "Aplexor AB",
     location: "Stockholm, SWEDEN",
@@ -49,7 +66,7 @@ const professionalRoles = [
     area: "Sales"
   },
   {
-    id: 3,
+    id: 4,
     title: "Application Engineer",
     company: "Exeger Operations AB",
     location: "Stockholm, SWEDEN",
@@ -65,7 +82,7 @@ const professionalRoles = [
     area: "Engineering,Sales"
   },
   {
-    id: 4,
+    id: 5,
     title: "Application Specialist",
     company: "Ascilion AB",
     location: "Stockholm, SWEDEN",
@@ -81,7 +98,7 @@ const professionalRoles = [
     area: "Engineering,Sales"
   },
   {
-    id: 5,
+    id: 6,
     title: "Development Engineer",
     company: "Ascilion AB",
     location: "Stockholm, SWEDEN",
@@ -97,7 +114,7 @@ const professionalRoles = [
     area: "Engineering"
   },
   {
-    id: 6,
+    id: 7,
     title: "Process Engineer",
     company: "Bright Day Graphene AB",
     location: "Stockholm, SWEDEN",
