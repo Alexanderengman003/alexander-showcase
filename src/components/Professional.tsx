@@ -14,7 +14,7 @@ import brightDayGrapheneLogo from "@/assets/bright-day-graphene-logo.png";
 import exegerLogo from "@/assets/exeger-logo.png";
 import ebvLogo from "@/assets/ebv-logo.png";
 import aplexorLogo from "@/assets/aplexor-logo.png";
-import aplexorLogo from "@/assets/ansys-logo.png";
+import ansysLogo from "@/assets/ansys-logo.png";
 
 const professionalRoles = [
     {
@@ -558,6 +558,28 @@ export function Professional() {
                     <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between mb-6 relative">
                       <div>
                         <h3 className="text-xl font-semibold text-foreground mb-2 leading-tight flex items-center gap-2">
+                         {role.company === "Ansys part of Synopsys" && (
+                            <a 
+                              href="https:/www.ansys.com/"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={() => track("Click", {
+                                type: 'company_logo',
+                                section: "Professional Experience",
+                                action: 'company_logo_click',
+                                item: "Ansys part of Synopsys",
+                                position: "Sales Account Manager, Sr Associate",
+                                url: "https://www.ansys.com/"
+                              })}
+                              className="hover:opacity-80 transition-opacity"
+                            >
+                              <img 
+                                src={ansysLogo} 
+                                alt="Ansys part of Synopsys" 
+                                className="h-5 w-5 rounded-sm"
+                              />
+                            </a>
+                          )}
                           {role.company === "EBV Elektronik" && (
                             <a 
                               href="https://my.avnet.com/ebv/"
@@ -675,6 +697,7 @@ export function Professional() {
                           <Building className="h-4 w-4" />
                           <a 
                             href={
+                              role.company === "Ansys part of Synopsys" ? "https://www.ansys.com/" :
                               role.company === "EBV Elektronik" ? "https://my.avnet.com/ebv/" :
                               role.company === "Ascilion AB" ? "https://www.ascilion.com/" :
                               role.company === "Bright Day Graphene AB" ? "https://www.brightdaygraphene.se/" :
@@ -690,7 +713,8 @@ export function Professional() {
                               action: 'company_name_click',
                               item: role.company,
                               position: role.title,
-                              url: role.company === "EBV Elektronik" ? "https://my.avnet.com/ebv/" :
+                              url: role.company === "Ansys part of Synopsys" ? "https://www.ansys.com/" :
+                                   role.company === "EBV Elektronik" ? "https://my.avnet.com/ebv/" :
                                    role.company === "Ascilion AB" ? "https://www.ascilion.com/" :
                                    role.company === "Bright Day Graphene AB" ? "https://www.brightdaygraphene.se/" :
                                    role.company === "Exeger Operations AB" ? "https://www.exeger.com/" :
@@ -772,6 +796,28 @@ export function Professional() {
                   <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between relative">
                     <div className="flex-1">
                       <h3 className="text-lg font-semibold text-foreground mb-1 leading-tight flex items-center gap-2">
+                        {role.company === "Ansys part of Synopsys" && (
+                          <a 
+                            href="https://www.ansys.com/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={() => track("Click", {
+                              type: 'company_logo',
+                              section: "Professional Experience",
+                              action: 'company_logo_click',
+                              item: "Ansys part of Synopsys",
+                              position: role.title,
+                              url: "https://www.ansys.com/"
+                            })}
+                            className="hover:opacity-80 transition-opacity"
+                          >
+                            <img 
+                              src={ansysLogo} 
+                              alt="Ansys part of Synopsys" 
+                              className="h-4 w-4 rounded-sm"
+                            />
+                          </a>
+                        )}
                         {role.company === "EBV Elektronik" && (
                           <a 
                             href="https://my.avnet.com/ebv/"
@@ -865,6 +911,7 @@ export function Professional() {
                       <div className="flex flex-col gap-1 text-muted-foreground">
                         <a 
                           href={
+                            role.company === "Ansys part of Synopsys" ? "https://www.ansys.com/" :
                             role.company === "EBV Elektronik" ? "https://my.avnet.com/ebv/" :
                             role.company === "Ascilion AB" ? "https://www.ascilion.com/" :
                             role.company === "Bright Day Graphene AB" ? "https://www.brightdaygraphene.se/" :
@@ -880,7 +927,8 @@ export function Professional() {
                             action: 'company_name_click',
                             item: role.company,
                             position: role.title,
-                            url: role.company === "EBV Elektronik" ? "https://my.avnet.com/ebv/" :
+                            url: role.company === "Ansys part of Synopsys" ? "https://www.ansys.com/" :
+                                 role.company === "EBV Elektronik" ? "https://my.avnet.com/ebv/" :
                                  role.company === "Ascilion AB" ? "https://www.ascilion.com/" :
                                  role.company === "Bright Day Graphene AB" ? "https://www.brightdaygraphene.se/" :
                                  role.company === "Exeger Operations AB" ? "https://www.exeger.com/" :
